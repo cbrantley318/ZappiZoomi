@@ -24,3 +24,6 @@
 
 # Unity3D generated file on crash
 crash.dmp
+
+# Other folders we dont want
+.vs/

@@ -14,9 +14,12 @@ public class ElevatorPlatform : MonoBehaviour
     // start position
     private Vector3 startPosition;
 
+    private Rigidbody2D MyRigidBody;
+
     void Start()
     {
         startPosition = transform.position;
+        MyRigidBody = GetComponent<Rigidbody2D>();
     }
 
     void Update()
@@ -27,6 +30,8 @@ public class ElevatorPlatform : MonoBehaviour
 
         float offset = Mathf.PingPong(Time.time * speed, moveDistance); // PingPong is an excellent function name btw   //wholeheartedly agree
         float newY = startPosition.y + offset;
-        transform.position = new Vector3(startPosition.x, newY, startPosition.z);
+        //transform.position = new Vector3(startPosition.x, newY, startPosition.z); //rigid bodies don't like us messing with transform directly :(
+        MyRigidBody.MovePosition(new Vector2(startPosition.x, newY));
+
     }
 }

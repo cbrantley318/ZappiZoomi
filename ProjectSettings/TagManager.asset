@@ -12,7 +12,7 @@ TagManager:
   - Water
   - UI
   - SolidObjects
-  - 
+  - MovingPlatform
   - 
   - 
   - 
@@ -38,6 +38,21 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Background
+    uniqueID: 2607576567
+    locked: 0
+  - name: FloorsWalls
+    uniqueID: 2216847705
+    locked: 0
+  - name: Hazards
+    uniqueID: 132272181
+    locked: 0
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: Routing
+    uniqueID: 1585669733
+    locked: 0
+  - name: SuperLayer
+    uniqueID: 1182983495
     locked: 0
