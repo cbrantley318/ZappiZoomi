@@ -25,7 +25,7 @@ public class ElevatorPlatform : MonoBehaviour
         if (!poweredOn)
             return;
 
-        float offset = Mathf.PingPong(Time.time * speed, moveDistance); // PingPong is an excellent function name btw
+        float offset = Mathf.PingPong(Time.time * speed, moveDistance); // PingPong is an excellent function name btw   //wholeheartedly agree
         float newY = startPosition.y + offset;
         transform.position = new Vector3(startPosition.x, newY, startPosition.z);
     }
