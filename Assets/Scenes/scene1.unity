@@ -1206,9 +1206,10 @@ MonoBehaviour:
     m_Bits: 64
   MovingPlatform:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 128
   jumpVelocity: 10
   moveVelocity: 3
+  isOnGround: 0
 --- !u!1 &1125733753
 GameObject:
   m_ObjectHideFlags: 0

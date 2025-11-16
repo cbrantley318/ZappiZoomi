@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
@@ -16,8 +17,8 @@ public class PlayerScript : MonoBehaviour
     private BoxCollider2D MyFeetHitbox;
     private Rigidbody2D MyRigidBody;
 
+
     private bool isOnGround = false;
-    private bool isOnMovingPlatform = false;
 
     //things that we get from other objects
     private Rigidbody2D movingPlatformBody;
@@ -33,38 +34,46 @@ public class PlayerScript : MonoBehaviour
     void Update()
     {
 
-        if (MyFeetHitbox.IsTouchingLayers(MovingPlatform))
-        {
-            MyRigidBody.velocity = movingPlatformBody.velocity;
-        }
+        CheckDynamicCollisions();   //for now this is just if we're touching elevators
+                                    //TODO: add the 'touching wire terminal' to this bit
+
 
         CheckPlayerInput();
 
-
     }
 
 
-    void OnCollisionEnter(Collision collision)
+    private void OnCollisionEnter2D(Collision2D collision)
     {
+        Debug.Log("enter");
         // Check if the collided object's layer is within the targetLayer mask
         if (((1 << collision.gameObject.layer) & GroundLayer) != 0)
         {
-            GameObject touchedObject = collision.gameObject;
+            Debug.Log("Heyo!");
             isOnGround = true;
         }
+
     }
 
-    void OnCollisionExit(Collision collision)
+    private void OnCollisionExit2D(Collision2D collision)
     {
-        // Check if the collided object's layer is within the targetLayer mask
+        Debug.Log("exit");
         if (((1 << collision.gameObject.layer) & GroundLayer) != 0)
         {
-            //Debug.Log("Touching object on target layer: " + collision.gameObject.name);
-            GameObject touchedObject = collision.gameObject;
-            
+            Debug.Log("Bye-O!");
+
+            isOnGround = false;
         }
+
     }
 
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (((1 << collision.gameObject.layer) & MovingPlatform) != 0)
+        {
+            movingPlatformBody = collision.gameObject.GetComponent<Rigidbody2D>();  //update reference so we know which elevator we care about
+        }
+    }
 
     void CheckPlayerInput()
     {
@@ -85,7 +94,24 @@ public class PlayerScript : MonoBehaviour
             if (MyFeetHitbox.IsTouchingLayers(GroundLayer))
             {
                 MyRigidBody.velocity = MyRigidBody.velocity + new Vector2(0, jumpVelocity);
+                Debug.Log(isOnGround);
             }
         }
     }
+
+    void CheckDynamicCollisions()
+    {
+        //make velocity same as the elevator's
+        if (movingPlatformBody != null && MyFeetHitbox.IsTouchingLayers(MovingPlatform))
+        {
+            MyRigidBody.velocity = movingPlatformBody.velocity;
+        }
+
+        //TODO: check for the "WireSource" layer and the "WireTerminal" layer (also create those layers)
+
+    }
+
+
+
+
 }
