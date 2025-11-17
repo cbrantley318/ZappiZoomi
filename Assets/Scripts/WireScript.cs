@@ -13,22 +13,26 @@ public class WireScript : MonoBehaviour
     [SerializeField] LayerMask WireTerminalLayer;
 
     private bool hasPower = true;   //in case we want to play around later with some wires being duds, I guess
+    private float segmentLength = 1.0f;
 
 
     private LineRenderer MyLineRenderer;
 
+    private void Awake()
+    {
+        MyLineRenderer = GetComponent<LineRenderer>();  //needs to be called before instantiate returns
+    }
 
-    
 
     void Start()
     {
-        MyLineRenderer = GetComponent<LineRenderer>();
+        //MyLineRenderer = GetComponent<LineRenderer>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        HandleAddingLineSegment();
     }
 
     public void SetWireBase(Vector3 StartPos)
@@ -38,6 +42,16 @@ public class WireScript : MonoBehaviour
         MyLineRenderer.SetPosition(1, transform.position);
     }
 
+    private void HandleAddingLineSegment()
+    {
+        //Vector3 lastPos = MyLineRenderer.GetPosition(MyLineRenderer.positionCount - 2);           //TODO: add this in if you want segmented lines instead of a straight shot
+                                                                                                    //(note that they aren't affected by gravity as a LineRenderer, would need chain physics for that)
+        //if ((lastPos-transform.position).magnitude > segmentLength)
+        //{
+        //    MyLineRenderer.positionCount++;
+        //} //add in ability to delete segments if less than a threshold
+        MyLineRenderer.SetPosition(MyLineRenderer.positionCount - 1, transform.position);
+    }
 
     void SnapToPosition(GameObject thingToSnapTo)
     {

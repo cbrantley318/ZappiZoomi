@@ -6,7 +6,8 @@ public class CameraScript : MonoBehaviour
 {
     public Transform target;     // GameObject
     public float smoothSpeed = 5f;
-    public Vector3 offset;    
+    public Vector3 offset;
+    public float threshold;
     [SerializeField] int MapL, MapR, MapU, MapD;  
 
     void LateUpdate()
@@ -20,7 +21,16 @@ public class CameraScript : MonoBehaviour
         desiredPosition.z = transform.position.z;
 
         // move camera toward GameObject
-        transform.position = Vector3.Lerp(transform.position, desiredPosition, smoothSpeed * Time.deltaTime);
+
+        if ((desiredPosition-transform.position).magnitude > threshold)
+        {
+            transform.position = desiredPosition + threshold * ((transform.position - desiredPosition).normalized);
+        } else
+        {
+            transform.position = Vector3.Lerp(transform.position, desiredPosition, smoothSpeed * Time.deltaTime);
+        }
+
+
     }
 
     // // Start is called before the first frame update

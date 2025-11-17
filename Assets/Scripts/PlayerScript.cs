@@ -46,6 +46,9 @@ public class PlayerScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        HandleWires();
+
+
 
         CheckDynamicCollisions();   //for now this is just if we're touching elevators
                                     //TODO: add the 'touching wire terminal' to this bit
@@ -83,6 +86,7 @@ public class PlayerScript : MonoBehaviour
 
     void CheckPlayerInput()
     {
+        /*-----MOTION---------*/
         if (Input.GetKey(KeyCode.LeftArrow))    //move left (no acceleration yet, just barebones for debugging until Hanchi pushes his code)
         {
             MyRigidBody.velocity = new Vector2(-moveVelocity, MyRigidBody.velocity.y);
@@ -102,15 +106,17 @@ public class PlayerScript : MonoBehaviour
                 MyRigidBody.velocity = MyRigidBody.velocity + new Vector2(0, jumpVelocity);
             }
         }
-
-        if (Input.GetKeyDown(KeyCode.Z) && !isCarryingWire)    //grab wire if not holding one already
+        
+        /*-----Grabbing Things---------*/
+        if (Input.GetKeyDown(KeyCode.Z))    //grab wire if not holding one already
         {
             if (GetComponent<BoxCollider2D>().IsTouchingLayers(WireSourceLayer))    //grab wire if not holding one already and if we're at a thing you can grab a wire from
             {
-                Assert.IsFalse(ActiveWireSpawner == null);  //todo: remove assertion once verified
-                SpawnWire(ActiveWireSpawner);
-                isCarryingWire = true;
-
+                if (!isCarryingWire) {
+                    Assert.IsFalse(ActiveWireSpawner == null);  //todo: remove assertion once verified
+                    SpawnWire(ActiveWireSpawner);
+                    isCarryingWire = true;  
+                }
             }
             if (GetComponent<BoxCollider2D>().IsTouchingLayers(WireTerminalLayer))  //if it's touching one of these layers, we have two options (see below)
             {
@@ -119,11 +125,27 @@ public class PlayerScript : MonoBehaviour
                 //  already holding a wire but there's already a wire in there          => either do nothing or maybe swap wires
                 //  holding a wire and terminal is empty                                => place wire in terminal
                 //  hands are free and wire in the terminal                             => grab the wire (DONT SPAWN A NEW ONE)
+
+                Debug.Log("Touching term layer!");
+
+                
+            } else if (isCarryingWire)
+            {
+                //if holding a wire and there's no terminals or sources nearby, then maybe let the player drop it?
+                Debug.Log("Not touching term layer");
             }
         }
 
 
 
+    }
+
+    private void HandleWires()
+    {
+        if (isCarryingWire)
+        {
+            CurrentWire.transform.position = transform.position + new Vector3(0, 1.5f, 0);
+        }
     }
 
     void SpawnWire(GameObject WireSpawner)
@@ -132,14 +154,17 @@ public class PlayerScript : MonoBehaviour
         Vector3 spawnPos = transform.position + new Vector3(0, 1.5f, 0);
         //instantiate a new wire
 
+        //the wire head is purely animation only, it will not alter collision hitboxes in any way so it doesn't need to be treated as a rigid body.
+        //while holding it, the player will just always fix it to a fixed location relative to the player
+        //eventually, we'll replace this with a new animation of the player holding the wire and then it'll only be the ine renderer.
         CurrentWire = Instantiate(WirePrefab, spawnPos, Quaternion.identity);
-
         CurrentWire.GetComponent<WireScript>().SetWireBase(startPos);
 
     }
 
     void PlaceWire(GameObject TargetTerminal)
     {
+        //TargetTerminal.GetComponent<>
         //places a wire at the target terminal, "setting it free" from the player and letting it exist until we pick it up again from there
 
     }
