@@ -17,7 +17,7 @@ public class CameraScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //TODO: make this track the player's location (for now just copy-paste what Paula did, adjust for viewing window layer
+        //TODO: make this track the player's location (for now just copy-paste what Paula did)
     
     }
 }

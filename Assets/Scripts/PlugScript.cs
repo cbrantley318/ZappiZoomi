@@ -19,4 +19,24 @@ public class PlugScript : MonoBehaviour
     {
         
     }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        //if the player enters our box, then tell them we're the wire spawn point
+        if (collision.gameObject.CompareTag("Player")) {
+            PlayerScript otherScript = collision.gameObject.GetComponent<PlayerScript>();
+            otherScript.ActiveWireSpawner = gameObject;
+        }
+        //the player script will actually handle the logic of checking if we're in a trigger box, I think
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            PlayerScript otherScript = collision.gameObject.GetComponent<PlayerScript>();
+            otherScript.ActiveWireSpawner = null;   //probably safe to just undo this once the player leaves, shouldn't affect anything though as long as playerscript has logic
+        }
+    }
+
 }
