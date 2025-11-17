@@ -4,20 +4,33 @@ using UnityEngine;
 
 public class CameraScript : MonoBehaviour
 {
-    [SerializeField] GameObject PlayerObject;   //the player we want to track
-    [SerializeField] int MapL, MapR, MapU, MapD;
+    public Transform target;     // GameObject
+    public float smoothSpeed = 5f;
+    public Vector3 offset;    
+    [SerializeField] int MapL, MapR, MapU, MapD;  
 
-
-    // Start is called before the first frame update
-    void Start()
+    void LateUpdate()
     {
-        
+        if (target == null) return;
+
+        // Desired position = GameObject+ offset
+        Vector3 desiredPosition = target.position + offset;
+
+        // z fixed so camera doesn’t drift
+        desiredPosition.z = transform.position.z;
+
+        // move camera toward GameObject
+        transform.position = Vector3.Lerp(transform.position, desiredPosition, smoothSpeed * Time.deltaTime);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        //TODO: make this track the player's location (for now just copy-paste what Paula did)
-    
-    }
+    // // Start is called before the first frame update
+    // void Start()
+    // { 
+    // }
+
+    // // Update is called once per frame
+    // void Update()
+    // {
+    // 
+    //}
 }
