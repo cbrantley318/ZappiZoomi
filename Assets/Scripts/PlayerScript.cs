@@ -1,223 +1,330 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.Assertions;
 
+/// <summary>
+/// Player controller with wire interaction support.
+/// - Walk/jump
+/// - Interact with plugs (open wire UI popup via PlugScript)
+/// - Spawn/pickup wires from sources
+/// - Place wires into terminals
+/// </summary>
+[RequireComponent(typeof(Rigidbody2D))]
 public class PlayerScript : MonoBehaviour
 {
+    [Header("References")]
     [SerializeField] GameObject PlayerFeet;
-    [SerializeField] GameObject WirePrefab;
-    [SerializeField] LayerMask GroundLayers;    //the layers the player can jump from
-    [SerializeField] LayerMask MovingPlatform;  //layers that we snap our velocity to. Note that if we change the player physics to acceleration instead of velocity-based, this could possibly cause some weird stuff
-    [SerializeField] LayerMask WireSourceLayer;
-    [SerializeField] LayerMask WireTerminalLayer;
-    [SerializeField] float jumpVelocity = 10;
-    [SerializeField] float moveVelocity = 5;    //technically speed not velocity
+    [SerializeField] GameObject WirePrefab;                 // prefab used when spawning a wire for the player
+    [SerializeField] LayerMask GroundLayers;                // layers considered ground for jumping
+    [SerializeField] LayerMask MovingPlatform;              // moving platforms / elevators
+    [SerializeField] LayerMask WireSourceLayer;             // the layer(s) that represent wire sources
+    [SerializeField] LayerMask WireTerminalLayer;           // layer(s) for placing wires into terminals
 
+    [Header("Movement")]
+    [SerializeField] float jumpVelocity = 10f;
+    [SerializeField] float moveVelocity = 5f;
 
+    // Public-ish fields other scripts read
+    [HideInInspector] public PlugScript ActiveWireSpawner;   // set by PlugScript when player enters the plug trigger
+    [HideInInspector] public GameObject ActiveWireTerminal;  // set by your terminal detection code (optional)
 
-    //things we want other scripts to access but not the editor
-    [HideInInspector] public GameObject ActiveWireSpawner;
-    [HideInInspector] public GameObject ActiveWireTerminal;
-
-
-    //things local to the player object
-
+    // Local state
     private BoxCollider2D MyFeetHitbox;
     private Rigidbody2D MyRigidBody;
-
-    //private bool isOnGround = false;
     private bool isCarryingWire = false;
-
-    //things that we get from other objects
-    private GameObject CurrentWire;
-
+    private GameObject CurrentWire = null;
     private Rigidbody2D movingPlatformBody;
 
+    // control lock used by UIMiniGameManager
+    private bool controlsLocked = false;
 
-    // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         MyRigidBody = GetComponent<Rigidbody2D>();
-        MyFeetHitbox = PlayerFeet.GetComponent<BoxCollider2D>();
+        if (PlayerFeet != null) MyFeetHitbox = PlayerFeet.GetComponent<BoxCollider2D>();
     }
 
-    // Update is called once per frame
+    void Start()
+    {
+        // make sure required refs exist
+        if (PlayerFeet == null) Debug.LogWarning("[PlayerScript] PlayerFeet not assigned.");
+        if (WirePrefab == null) Debug.LogWarning("[PlayerScript] WirePrefab not assigned (required to spawn wires).");
+    }
+
     void Update()
     {
+        // always update wire-follow behavior (so a carried wire follows even while controls locked)
         HandleWires();
 
-        CheckDynamicCollisions();   //for now this is just if we're touching elevators
-                                    //TODO: add the 'touching wire terminal' to this bit
-        CheckPlayerInput();         //for moving and jumping and (eventually) grabbing wires and placing them and probably a pause screen as well
+        // detect dynamic collisions (platform parenting etc.)
+        CheckDynamicCollisions();
 
+        // if controls are locked (e.g., UI popup open), don't accept movement or input
+        if (controlsLocked) return;
+
+        // movement and input
+        CheckPlayerInput();
     }
 
-    //technically both of these oncollision checks serve no prupose, but leaving it here in case we want to use it for something else
-    //private void OnCollisionEnter2D(Collision2D collision)
-    //{
-    //    // Check if the collided object's layer is within the targetLayer mask  //gotta love AI-generated comments lol
-    //    if (((1 << collision.gameObject.layer) & GroundLayer) != 0)
-    //    {
-    //        isOnGround = true;
-    //    }
-
-    //}
-
-    //private void OnCollisionExit2D(Collision2D collision)
-    //{
-    //    if (((1 << collision.gameObject.layer) & GroundLayer) != 0)
-    //    {
-    //        isOnGround = false;
-    //    }
-
-    //}
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (((1 << collision.gameObject.layer) & MovingPlatform) != 0)
-        {
-            movingPlatformBody = collision.gameObject.GetComponent<Rigidbody2D>();  //update reference so we know which elevator we care about
-        }
-    }
+    #region Movement & Input
 
     void CheckPlayerInput()
     {
         /*-----MOTION---------*/
-        if (Input.GetKey(KeyCode.LeftArrow))    //move left (no acceleration yet, just barebones for debugging until Hanchi pushes his code)
+        float vx = 0f;
+        if (Input.GetKey(KeyCode.LeftArrow)) vx = -1f;
+        if (Input.GetKey(KeyCode.RightArrow)) vx = 1f;
+
+        Vector2 newVel = new Vector2(vx * moveVelocity, MyRigidBody.velocity.y);
+        MyRigidBody.velocity = newVel;
+
+        if (Input.GetKeyDown(KeyCode.Space))
         {
-            MyRigidBody.velocity = new Vector2(-moveVelocity, MyRigidBody.velocity.y);
-
-        }
-
-        if (Input.GetKey(KeyCode.RightArrow))   //move right
-        {
-            MyRigidBody.velocity = new Vector2(moveVelocity, MyRigidBody.velocity.y);
-
-        }
-
-        if (Input.GetKeyDown(KeyCode.Space))    //jump
-        {
-            if (MyFeetHitbox.IsTouchingLayers(GroundLayers) || MyFeetHitbox.IsTouchingLayers(MovingPlatform))
+            if (MyFeetHitbox != null && (MyFeetHitbox.IsTouchingLayers(GroundLayers) || MyFeetHitbox.IsTouchingLayers(MovingPlatform)))
             {
-                MyRigidBody.velocity = MyRigidBody.velocity + new Vector2(0, jumpVelocity);
+                MyRigidBody.velocity = MyRigidBody.velocity + new Vector2(0f, jumpVelocity);
             }
         }
-        
-        /*-----Grabbing Things---------*/
-        if (Input.GetKeyDown(KeyCode.Z))    //grab wire if not holding one already
+
+        /*-----INTERACTION (Z)---------*/
+        if (Input.GetKeyDown(KeyCode.Z))
         {
-            if (GetComponent<BoxCollider2D>().IsTouchingLayers(WireSourceLayer))    //grab wire if not holding one already and if we're at a thing you can grab a wire from
+            // 1) Priority: if near a plug (ActiveWireSpawner) then open UI popup instead of spawning a wire immediately
+            if (ActiveWireSpawner != null)
             {
-                if (!isCarryingWire) {
-                    Assert.IsFalse(ActiveWireSpawner == null);  //todo: remove assertion once verified
-                    SpawnWire(ActiveWireSpawner);
+                PlugScript plug = ActiveWireSpawner as PlugScript;
+                if (plug != null)
+                {
+                    float maxUseDistance = 1.6f;
+                    float dist = Vector2.Distance(transform.position, plug.transform.position);
+                    if (dist <= maxUseDistance)
+                    {
+                        plug.TryOpenMiniGame(this);
+                        return; // don't also spawn wire or interact with terminal
+                    }
+                    else
+                    {
+                        // stale reference - clear and continue to other checks
+                        ActiveWireSpawner = null;
+                    }
                 }
             }
-            if (GetComponent<BoxCollider2D>().IsTouchingLayers(WireTerminalLayer))  //if it's touching one of these layers, we have two options (see below)
+
+            // 2) If touching a wire source and not currently carrying a wire -> spawn and pick one up
+            if (!isCarryingWire && GetComponent<BoxCollider2D>().IsTouchingLayers(WireSourceLayer))
+            {
+                SpawnWire(ActiveWireSpawner); // ActiveWireSpawner may be null; method handles null safely
+                return;
+            }
+
+            // 3) If touching a terminal -> handle terminal interaction (existing logic)
+            if (GetComponent<BoxCollider2D>().IsTouchingLayers(WireTerminalLayer))
             {
                 HandleWireTermInteraction();
-                
-            } else if (isCarryingWire)
-            {
-                //if holding a wire and there's no terminals or sources nearby, then maybe let the player drop it?
-                //Debug.Log("Not touching term layer");
-                //TODO: just drop the wire on the ground and stop carrying it
-                //the caveat is that currently it can only be picked up from another terminal (i.e. the wire itself has no collisions at all
-                //so maybe just don't let them drop the wires, especially because I can't think of any scenario that would help
+                return;
             }
+
+            // otherwise no action
         }
-
-
-
     }
+
+    #endregion
+
+    #region Wire handling
 
     private void HandleWires()
     {
-        if (isCarryingWire)
+        if (isCarryingWire && CurrentWire != null)
         {
-            CurrentWire.transform.position = transform.position + new Vector3(0, 1.5f, 0);
+            // keep the wire positioned relative to the player (example offset)
+            CurrentWire.transform.position = transform.position + new Vector3(0f, 1.5f, 0f);
         }
     }
 
-    private void SpawnWire(GameObject WireSpawner)
+    // Public wrapper so other scripts (PlugScript) can give the player a wire GameObject
+    public void ReceiveWire(GameObject wire)
     {
-        Vector3 startPos = ActiveWireSpawner.transform.position;
-        Vector3 spawnPos = transform.position + new Vector3(0, 1.5f, 0);
-
-        //the wire head is purely animation only, it will not alter collision hitboxes in any way so it doesn't need to be treated as a rigid body.
-        //while holding it, the player will just always fix it to a fixed location relative to the player
-        //eventually, we'll replace this with a new animation of the player holding the wire and then it'll only be the ine renderer.
-        CurrentWire = Instantiate(WirePrefab, spawnPos, Quaternion.identity);
-        CurrentWire.GetComponent<WireScript>().SetWireBase(startPos);
-        PickUpWire(CurrentWire);
-
+        if (wire == null)
+        {
+            Debug.LogWarning("[PlayerScript] ReceiveWire called with null wire.");
+            return;
+        }
+        PickUpWire(wire);
     }
 
+    // internal pickup logic (keeps same behaviour as your original)
     private void PickUpWire(GameObject wire)
     {
+        if (wire == null)
+        {
+            Debug.LogWarning("[PlayerScript] PickUpWire: wire is null.");
+            return;
+        }
         CurrentWire = wire;
         isCarryingWire = true;
     }
 
+    // safe SpawnWire implementation - accepts a PlugScript (may be null).
+    private void SpawnWire(PlugScript WireSpawner)
+    {
+        // logging to help debugging
+        // Debug.Log($"SpawnWire called. WireSpawner={(WireSpawner==null?"null":WireSpawner.name)}, ActiveWireSpawner={(ActiveWireSpawner==null?"null":ActiveWireSpawner.name)}");
+
+        // Determine start position for the wire base
+        Vector3 startPos;
+        if (WireSpawner != null)
+        {
+            startPos = WireSpawner.transform.position;
+        }
+        else if (ActiveWireSpawner != null)
+        {
+            startPos = ActiveWireSpawner.transform.position;
+        }
+        else
+        {
+            startPos = transform.position;
+            Debug.LogWarning("[PlayerScript] SpawnWire: WireSpawner null, using player position as base.");
+        }
+
+        // spawn location relative to player
+        Vector3 spawnPos = transform.position + new Vector3(0f, 1.5f, 0f);
+
+        // safety checks
+        if (WirePrefab == null)
+        {
+            Debug.LogError("[PlayerScript] SpawnWire failed: WirePrefab not assigned in inspector.");
+            return;
+        }
+
+        CurrentWire = Instantiate(WirePrefab, spawnPos, Quaternion.identity);
+        if (CurrentWire == null)
+        {
+            Debug.LogError("[PlayerScript] SpawnWire: Instantiate returned null.");
+            return;
+        }
+
+        WireScript wireScript = CurrentWire.GetComponent<WireScript>();
+        if (wireScript == null)
+        {
+            Debug.LogError("[PlayerScript] SpawnWire: spawned WirePrefab missing WireScript component.");
+            return;
+        }
+
+        wireScript.SetWireBase(startPos);
+        PickUpWire(CurrentWire);
+    }
+
+    #endregion
+
+    #region Terminal & dynamic collisions
+
     private void PlaceWire(GameObject TargetTerminal)
     {
-        //places a wire at the target terminal, "setting it free" from the player and letting it exist until we pick it up again from there
-        isCarryingWire = false;
-        TargetTerminal.GetComponent<PowerTermScript>().PowerOn();
-        TargetTerminal.GetComponent<PowerTermScript>().CurrentWire = CurrentWire;   //save a reference to the wire here
-        CurrentWire.GetComponent<WireScript>().SnapToPosition(TargetTerminal, new Vector3(-.75f, 0, 0));    //todo: play around with different offsets
-        
+        if (CurrentWire == null)
+        {
+            Debug.LogWarning("[PlayerScript] PlaceWire called but CurrentWire is null.");
+            return;
+        }
 
+        isCarryingWire = false;
+        var termScript = TargetTerminal.GetComponent<PowerTermScript>();
+        if (termScript != null)
+        {
+            termScript.PowerOn();
+            termScript.CurrentWire = CurrentWire;
+            CurrentWire.GetComponent<WireScript>().SnapToPosition(TargetTerminal, new Vector3(-0.75f, 0f, 0f));
+            CurrentWire = null;
+        }
+        else
+        {
+            Debug.LogWarning("[PlayerScript] PlaceWire: target terminal missing PowerTermScript.");
+        }
     }
 
     private void CheckDynamicCollisions()
     {
-        //make velocity same as the elevator's
-        if (movingPlatformBody != null && MyFeetHitbox.IsTouchingLayers(MovingPlatform))
+        // elevator / moving platform parenting
+        if (movingPlatformBody != null && MyFeetHitbox != null && MyFeetHitbox.IsTouchingLayers(MovingPlatform))
         {
             transform.SetParent(movingPlatformBody.gameObject.transform);
-            //MyRigidBody.velocity = movingPlatformBody.velocity;     //todo: fix problem of jumping and moving off of this without it snapping the player back down
-        } else
+        }
+        else
         {
             transform.SetParent(null);
         }
 
-        //TODO: check for the "WireSource" layer and the "WireTerminal" layer (also create those layers in the Inspector
+        // TODO: update ActiveWireTerminal detection if you want automatic detection
     }
 
-    private void HandleWireTermInteraction()
-    {
-        //Option A: overload the Z key and run through 4 cases:
-        //  not holding wire and no wire in the terminal already                => do nothing
-        //  already holding a wire but there's already a wire in there          => either do nothing or maybe swap wires
-        //  holding a wire and terminal is empty                                => place wire in terminal
-        //  hands are free and wire in the terminal                             => grab the wire (DONT SPAWN A NEW ONE)
+    #endregion
 
-        int switchVal = (isCarryingWire?1:0) << 1 | (ActiveWireTerminal.GetComponent<PowerTermScript>().poweredOn? 1:0);
-        switch (switchVal)
+    #region Trigger handlers
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        // keep movingPlatformBody when we come in contact with elevators (if applicable)
+        if (((1 << collision.gameObject.layer) & (int)MovingPlatform) != 0)
         {
-            case 0:         //00 = do nothing
-                break;
-            case 1:         //01 = pick up wire
-                PickUpWire(ActiveWireTerminal.GetComponent<PowerTermScript>().CurrentWire);
-                ActiveWireTerminal.GetComponent<PowerTermScript>().PowerOff();
-                break;
-            case 2:         //10 = place down wire
-                PlaceWire(ActiveWireTerminal);
-                break;
-            case 3:         //11 = do nothing for now (maybe swap later?)
-                Debug.Log("tried placing a wire somewhere already full");
-                break;
-            default:
-                break;
+            movingPlatformBody = collision.gameObject.GetComponent<Rigidbody2D>();
         }
 
+        // Note: PlugScript should set ActiveWireSpawner when the player enters its interactiveBox
+        // Terminals may also set ActiveWireTerminal in their own triggers (not handled here)
     }
 
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (((1 << collision.gameObject.layer) & (int)MovingPlatform) != 0)
+        {
+            movingPlatformBody = null;
+        }
+    }
 
+    // Handles placing or picking up wires at a powered terminal.
+private void HandleWireTermInteraction()
+{
+    // 0bXY bit pattern: X = carrying wire?, Y = terminal already powered?
+    int switchVal = (isCarryingWire ? 1 : 0) << 1 |
+                    (ActiveWireTerminal != null &&
+                     ActiveWireTerminal.GetComponent<PowerTermScript>()?.poweredOn == true ? 1 : 0);
 
+    switch (switchVal)
+    {
+        case 0: // 00 = not holding wire & terminal empty
+            Debug.Log("Nothing to do at terminal.");
+            break;
+        case 1: // 01 = pick up wire from terminal
+            if (ActiveWireTerminal != null)
+            {
+                var term = ActiveWireTerminal.GetComponent<PowerTermScript>();
+                PickUpWire(term.CurrentWire);
+                term.PowerOff();
+            }
+            break;
+        case 2: // 10 = place down wire
+            if (ActiveWireTerminal != null)
+                PlaceWire(ActiveWireTerminal);
+            break;
+        case 3: // 11 = both full; maybe swap later
+            Debug.Log("Tried placing a wire somewhere already full.");
+            break;
+    }
+}
 
+    #endregion
+
+    #region Utility: control lock used by popup
+
+    // Called by UIMiniGameManager (via PlugScript) to lock/unlock player controls
+    public void SetControlLocked(bool locked)
+    {
+        controlsLocked = locked;
+        if (locked && MyRigidBody != null)
+        {
+            MyRigidBody.velocity = Vector2.zero;
+        }
+    }
+
+    #endregion
 }
