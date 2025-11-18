@@ -15,6 +15,7 @@ public class ElevatorPlatform : MonoBehaviour
     private Vector3 startPosition;
     private Rigidbody2D MyRigidBody;
 
+    private int moveDirection = 1;  //1 is up, 0 is back
     private GameObject parentObj;
 
 
@@ -37,9 +38,15 @@ public class ElevatorPlatform : MonoBehaviour
         if (poweredOn && newY > transform.position.y)                        //changed to this becase the RigidBody stuff doesn't like editing the transform.position directly :(
         {                                                       //also because the playerScript needs to get the velocity of this, so for that to work we need a velocity
             MyRigidBody.velocity = new Vector2(0, speed);
+            moveDirection = 1;
         } else if (newY < transform.position.y)
         {
             MyRigidBody.velocity = new Vector2(0, -speed);
+            if (moveDirection == 1 && GameObject.FindWithTag("Player").transform.IsChildOf(transform))
+            {
+                GameObject.FindWithTag("Player").GetComponent<Rigidbody2D>().velocity = MyRigidBody.velocity;
+            }
+            moveDirection = 0;
         }
 
     }

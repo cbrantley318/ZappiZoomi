@@ -1314,9 +1314,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PlayerFeet: {fileID: 1422479226}
   WirePrefab: {fileID: 1472467547164495124, guid: 1db10a33f645dda40b311ebc060fdd9c, type: 3}
-  GroundLayer:
+  GroundLayers:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 192
   MovingPlatform:
     serializedVersion: 2
     m_Bits: 128

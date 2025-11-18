@@ -7,6 +7,7 @@ public class PowerTermScript : MonoBehaviour
     // Start is called before the first frame update
 
     [HideInInspector] public bool poweredOn;
+    [HideInInspector] public GameObject CurrentWire;
     [SerializeField] Color termColor;           //TODO: add in multiple colors
 
     void Start()
