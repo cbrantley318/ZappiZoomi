@@ -204,4 +204,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   WireTerminalLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 512

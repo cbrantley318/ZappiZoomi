@@ -20,6 +20,7 @@ public class PlayerScript : MonoBehaviour
 
     //things we want other scripts to access but not the editor
     [HideInInspector] public GameObject ActiveWireSpawner;
+    [HideInInspector] public GameObject ActiveWireTerminal;
 
 
     //things local to the player object
@@ -47,8 +48,6 @@ public class PlayerScript : MonoBehaviour
     void Update()
     {
         HandleWires();
-
-
 
         CheckDynamicCollisions();   //for now this is just if we're touching elevators
                                     //TODO: add the 'touching wire terminal' to this bit
@@ -126,6 +125,9 @@ public class PlayerScript : MonoBehaviour
             {
                 //if holding a wire and there's no terminals or sources nearby, then maybe let the player drop it?
                 Debug.Log("Not touching term layer");
+                //TODO: just drop the wire on the ground and stop carrying it
+                //the caveat is that currently it can only be picked up from another terminal (i.e. the wire itself has no collisions at all
+                //so maybe just don't let them drop the wires, especially because I can't think of any scenario that would help
             }
         }
 
@@ -180,7 +182,22 @@ public class PlayerScript : MonoBehaviour
         //  already holding a wire but there's already a wire in there          => either do nothing or maybe swap wires
         //  holding a wire and terminal is empty                                => place wire in terminal
         //  hands are free and wire in the terminal                             => grab the wire (DONT SPAWN A NEW ONE)
-        //int switchVal = (isCarryingWire?1:0) << 1 | ();
+
+        int switchVal = (isCarryingWire?1:0) << 1 | (ActiveWireTerminal.GetComponent<PowerTermScript>().poweredOn? 1:0);
+        switch (switchVal)
+        {
+            case 0:         //00 = do nothing
+                break;
+            case 1:         //01 = pick up wire
+                break;
+            case 2:         //10 = place down wire
+                break;
+            case 3:         //11 = do nothing for now (maybe swap later?)
+                Debug.Log("tried placing a wire somewhere already full");
+                break;
+            default:
+                break;
+        }
 
     }
 

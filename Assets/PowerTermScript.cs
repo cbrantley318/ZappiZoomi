@@ -7,7 +7,7 @@ public class PowerTermScript : MonoBehaviour
     // Start is called before the first frame update
 
     [HideInInspector] public bool poweredOn;
-
+    [SerializeField] Color termColor;           //TODO: add in multiple colors
 
     void Start()
     {
@@ -32,11 +32,20 @@ public class PowerTermScript : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log("I got the power");
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            Debug.Log("player entered the thing");
+            PlayerScript player = collision.gameObject.GetComponent<PlayerScript>();
+            player.ActiveWireTerminal = gameObject;
+        }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        Debug.Log("Ain't got the power no more");
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            PlayerScript player = collision.gameObject.GetComponent<PlayerScript>();
+            player.ActiveWireTerminal = null;
+        }
     }
 }

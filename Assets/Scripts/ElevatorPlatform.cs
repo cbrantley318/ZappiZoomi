@@ -37,7 +37,7 @@ public class ElevatorPlatform : MonoBehaviour
         if (poweredOn && newY > transform.position.y)                        //changed to this becase the RigidBody stuff doesn't like editing the transform.position directly :(
         {                                                       //also because the playerScript needs to get the velocity of this, so for that to work we need a velocity
             MyRigidBody.velocity = new Vector2(0, speed);
-        } else
+        } else if (newY < transform.position.y)
         {
             MyRigidBody.velocity = new Vector2(0, -speed);
         }

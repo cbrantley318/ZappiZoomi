@@ -7,10 +7,11 @@ public class WireScript : MonoBehaviour
 {
     //this script handles probably two things
     // - drawing the wire to follow after where the player moves
-    // - snapping 
+    // - snapping into certain positions when it's plugged in. 
+    //it will not handle actually picking up and placing itself, currently that's implemented in the player logic but it could be here as well
 
 
-    [SerializeField] LayerMask WireTerminalLayer;
+    [SerializeField] LayerMask WireTerminalLayer;   //maybe make this both wire source and wire terminal, idk yet but change in Inspector
 
     private bool hasPower = true;   //in case we want to play around later with some wires being duds, I guess
     private float segmentLength = 1.0f;
@@ -53,14 +54,10 @@ public class WireScript : MonoBehaviour
         MyLineRenderer.SetPosition(MyLineRenderer.positionCount - 1, transform.position);
     }
 
-    public void SnapToPosition(GameObject thingToSnapTo)
+    public void SnapToPosition(GameObject thingToSnapTo, Vector3 offset)
     {
         //note: the player script will have to properly "detach" us from it first
         //Assert.IsTrue(((1 << thingToSnapTo.layer) & WireTerminalLayer) != 0);   //make sure we're snapping to a terminal node thingy
-
-        //this shouldnt be a rigidbody or anything like that, so modifying the transform directly is A-OK
-
-        Vector3 offset = new(-0.5f, -0.2f, 0);      //complete guess here, this also has the implication that every plug needs to be the same which I'm fine with
         transform.position = thingToSnapTo.transform.position + offset;
     }
 }
