@@ -53,10 +53,10 @@ public class WireScript : MonoBehaviour
         MyLineRenderer.SetPosition(MyLineRenderer.positionCount - 1, transform.position);
     }
 
-    void SnapToPosition(GameObject thingToSnapTo)
+    public void SnapToPosition(GameObject thingToSnapTo)
     {
-        //note: the player script will have to properly "detach" us from it first, unless we track that in this script, idk haven't decided yet
-        Assert.IsTrue(((1 << thingToSnapTo.layer) & WireTerminalLayer) != 0);   //make sure we're snapping to a terminal node thingy
+        //note: the player script will have to properly "detach" us from it first
+        //Assert.IsTrue(((1 << thingToSnapTo.layer) & WireTerminalLayer) != 0);   //make sure we're snapping to a terminal node thingy
 
         //this shouldnt be a rigidbody or anything like that, so modifying the transform directly is A-OK
 

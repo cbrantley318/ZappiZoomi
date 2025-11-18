@@ -15,18 +15,19 @@ public class ElevatorPlatform : MonoBehaviour
     private Vector3 startPosition;
     private Rigidbody2D MyRigidBody;
 
-    private GameObject childTerm;
+    private GameObject parentObj;
 
 
     void Start()
     {
         startPosition = transform.position;
         MyRigidBody = GetComponent<Rigidbody2D>();
+        parentObj = transform.parent.gameObject;
     }
 
     void Update()
     {
-        poweredOn = GetComponentInParent<PowerTermScript>().poweredOn;
+        poweredOn = parentObj.GetComponentInChildren<PowerTermScript>().poweredOn;  //there can be only one (PowerTermScript, that is)
                 
 
         float offset = Mathf.PingPong(Time.time * speed, moveDistance); // PingPong is an excellent function name btw   //wholeheartedly agree
@@ -43,19 +44,5 @@ public class ElevatorPlatform : MonoBehaviour
 
     }
 
-    public void PowerOn()
-    {
-        poweredOn = true;
-    }
-
-    public void PowerOff()
-    {
-        poweredOn = false;
-    }
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        
-    }
 
 }

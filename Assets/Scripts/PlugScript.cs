@@ -22,10 +22,8 @@ public class PlugScript : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log("Entered power source");
         //if the player enters our box, then tell them we're the wire spawn point
         if (collision.gameObject.CompareTag("Player")) {
-            Debug.Log("It's a hit");
             PlayerScript otherScript = collision.gameObject.GetComponent<PlayerScript>();
             otherScript.ActiveWireSpawner = gameObject;
         }

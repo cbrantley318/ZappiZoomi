@@ -120,14 +120,7 @@ public class PlayerScript : MonoBehaviour
             }
             if (GetComponent<BoxCollider2D>().IsTouchingLayers(WireTerminalLayer))  //if it's touching one of these layers, we have two options (see below)
             {
-                //Option A: overload the Z key and run through 4 cases:
-                //  not holding wire and no wire in the terminal already                => do nothing
-                //  already holding a wire but there's already a wire in there          => either do nothing or maybe swap wires
-                //  holding a wire and terminal is empty                                => place wire in terminal
-                //  hands are free and wire in the terminal                             => grab the wire (DONT SPAWN A NEW ONE)
-
-                Debug.Log("Touching term layer!");
-
+                HandleWireTermInteraction();
                 
             } else if (isCarryingWire)
             {
@@ -148,7 +141,7 @@ public class PlayerScript : MonoBehaviour
         }
     }
 
-    void SpawnWire(GameObject WireSpawner)
+    private void SpawnWire(GameObject WireSpawner)
     {
         Vector3 startPos = ActiveWireSpawner.transform.position;
         Vector3 spawnPos = transform.position + new Vector3(0, 1.5f, 0);
@@ -162,14 +155,14 @@ public class PlayerScript : MonoBehaviour
 
     }
 
-    void PlaceWire(GameObject TargetTerminal)
+    private void PlaceWire(GameObject TargetTerminal)
     {
         //TargetTerminal.GetComponent<>
         //places a wire at the target terminal, "setting it free" from the player and letting it exist until we pick it up again from there
 
     }
 
-    void CheckDynamicCollisions()
+    private void CheckDynamicCollisions()
     {
         //make velocity same as the elevator's
         if (movingPlatformBody != null && MyFeetHitbox.IsTouchingLayers(MovingPlatform))
@@ -177,8 +170,17 @@ public class PlayerScript : MonoBehaviour
             MyRigidBody.velocity = movingPlatformBody.velocity;
         }
 
-        //TODO: check for the "WireSource" layer and the "WireTerminal" layer (also create those layers in the Inspector)
+        //TODO: check for the "WireSource" layer and the "WireTerminal" layer (also create those layers in the Inspector
+    }
 
+    private void HandleWireTermInteraction()
+    {
+        //Option A: overload the Z key and run through 4 cases:
+        //  not holding wire and no wire in the terminal already                => do nothing
+        //  already holding a wire but there's already a wire in there          => either do nothing or maybe swap wires
+        //  holding a wire and terminal is empty                                => place wire in terminal
+        //  hands are free and wire in the terminal                             => grab the wire (DONT SPAWN A NEW ONE)
+        //int switchVal = (isCarryingWire?1:0) << 1 | ();
 
     }
 
