@@ -13,8 +13,8 @@ public class WireScript : MonoBehaviour
 
     [SerializeField] LayerMask WireTerminalLayer;   //maybe make this both wire source and wire terminal, idk yet but change in Inspector
 
-    private bool hasPower = true;   //in case we want to play around later with some wires being duds, I guess
-    private float segmentLength = 1.0f;
+    //private bool hasPower = true;   //in case we want to play around later with some wires being duds, I guess
+    //private float segmentLength = 1.0f;
 
 
     private LineRenderer MyLineRenderer;

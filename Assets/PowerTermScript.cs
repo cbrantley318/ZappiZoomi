@@ -35,7 +35,6 @@ public class PowerTermScript : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            Debug.Log("player entered the thing");
             PlayerScript player = collision.gameObject.GetComponent<PlayerScript>();
             player.ActiveWireTerminal = gameObject;
         }

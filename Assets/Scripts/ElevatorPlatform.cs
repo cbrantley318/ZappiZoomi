@@ -35,18 +35,31 @@ public class ElevatorPlatform : MonoBehaviour
         float newY = startPosition.y + offset;
 
         //transform.position = new Vector3(startPosition.x, newY, startPosition.z);
-        if (poweredOn && newY > transform.position.y)                        //changed to this becase the RigidBody stuff doesn't like editing the transform.position directly :(
-        {                                                       //also because the playerScript needs to get the velocity of this, so for that to work we need a velocity
-            MyRigidBody.velocity = new Vector2(0, speed);
-            moveDirection = 1;
-        } else if (newY < transform.position.y)
+        if (poweredOn)
         {
-            MyRigidBody.velocity = new Vector2(0, -speed);
-            if (moveDirection == 1 && GameObject.FindWithTag("Player").transform.IsChildOf(transform))
+            if (newY > transform.position.y)                        //changed to this becase the RigidBody stuff doesn't like editing the transform.position directly :(
+            {                                                       //also because the playerScript needs to get the velocity of this, so for that to work we need a velocity
+                MyRigidBody.velocity = new Vector2(0, speed);
+                moveDirection = 1;
+            } else if (newY < transform.position.y)
             {
-                GameObject.FindWithTag("Player").GetComponent<Rigidbody2D>().velocity = MyRigidBody.velocity;
+                MyRigidBody.velocity = new Vector2(0, -speed);
+                if (moveDirection == 1 && GameObject.FindWithTag("Player").transform.IsChildOf(transform))
+                {
+                    GameObject.FindWithTag("Player").GetComponent<Rigidbody2D>().velocity = MyRigidBody.velocity;
+                }
+                moveDirection = 0;
             }
-            moveDirection = 0;
+        } else
+        {
+            //if poweredOff, move back to resting position
+            if (!Mathf.Approximately((MyRigidBody.transform.position - startPosition).magnitude, 0))
+            {
+                MyRigidBody.velocity = speed * (startPosition - transform.position).normalized;
+            } else
+            {
+                MyRigidBody.velocity = Vector3.zero;
+            }
         }
 
     }
