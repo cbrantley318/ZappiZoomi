@@ -115,7 +115,7 @@ public class PlayerScript : MonoBehaviour
         {
             if (GetComponent<BoxCollider2D>().IsTouchingLayers(WireSourceLayer))    //grab wire if not holding one already and if we're at a thing you can grab a wire from
             {
-                if (!isCarryingWire) {
+                if (!isCarryingWire) {  //try to "pick up" a wire
                     Assert.IsFalse(ActiveWireSpawner == null);  //todo: remove assertion once verified
                     SpawnWire(ActiveWireSpawner);
                 }

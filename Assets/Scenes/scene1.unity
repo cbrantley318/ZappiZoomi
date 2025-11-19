@@ -6937,8 +6937,40 @@ PrefabInstance:
       value: PowerPlug
       objectReference: {fileID: 0}
     - target: {fileID: 4177694748963038396, guid: e639d09084786494094011e0b7d664d2, type: 3}
+      propertyPath: m_Color.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4177694748963038396, guid: e639d09084786494094011e0b7d664d2, type: 3}
+      propertyPath: m_Color.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4177694748963038396, guid: e639d09084786494094011e0b7d664d2, type: 3}
+      propertyPath: m_Color.r
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4177694748963038396, guid: e639d09084786494094011e0b7d664d2, type: 3}
       propertyPath: m_SortingOrder
       value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4492136200726811451, guid: e639d09084786494094011e0b7d664d2, type: 3}
+      propertyPath: availableColors.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4492136200726811451, guid: e639d09084786494094011e0b7d664d2, type: 3}
+      propertyPath: availableColors.Array.data[0].a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4492136200726811451, guid: e639d09084786494094011e0b7d664d2, type: 3}
+      propertyPath: availableColors.Array.data[0].b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4492136200726811451, guid: e639d09084786494094011e0b7d664d2, type: 3}
+      propertyPath: availableColors.Array.data[0].g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4492136200726811451, guid: e639d09084786494094011e0b7d664d2, type: 3}
+      propertyPath: availableColors.Array.data[0].r
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5331854397999974157, guid: e639d09084786494094011e0b7d664d2, type: 3}
       propertyPath: m_LocalPosition.x
