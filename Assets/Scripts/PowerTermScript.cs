@@ -13,6 +13,15 @@ public class PowerTermScript : MonoBehaviour
     void Start()
     {
         poweredOn = false;
+        //set the wire line and the terminal FG color to the active color (Red)
+        //TODO: make a colors enum/lookup-table using only the allowed in-game colors instead of relying on us to set the color in unity manually
+        SpriteRenderer fgSprite = transform.GetChild(0).GetComponent<SpriteRenderer>();
+        LineRenderer powerLine = GetComponent<LineRenderer>();
+
+        fgSprite.color = termColor;
+        powerLine.startColor = termColor;  //this would've been so helpful to know in my solo game
+        powerLine.endColor = termColor;
+
     }
 
     // Update is called once per frame
@@ -38,6 +47,7 @@ public class PowerTermScript : MonoBehaviour
             PlayerScript player = collision.gameObject.GetComponent<PlayerScript>();
             player.ActiveWireTerminal = gameObject;
         }
+
     }
 
     private void OnTriggerExit2D(Collider2D collision)

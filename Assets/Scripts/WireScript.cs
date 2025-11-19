@@ -16,24 +16,43 @@ public class WireScript : MonoBehaviour
     //private bool hasPower = true;   //in case we want to play around later with some wires being duds, I guess
     //private float segmentLength = 1.0f;
 
+    private Color WireColor;    //this is set by SpawnWire, and it's used to determine where you can shove it
 
     private LineRenderer MyLineRenderer;
+    private SpriteRenderer fgSprite;
 
     private void Awake()
     {
+        WireColor = Color.white;    //default val
         MyLineRenderer = GetComponent<LineRenderer>();  //needs to be called before instantiate returns
+        fgSprite = transform.GetChild(0).GetComponent<SpriteRenderer>(); //this one doesnt but whatever, maybe it does
+
     }
 
 
     void Start()
     {
-        //MyLineRenderer = GetComponent<LineRenderer>();
     }
 
     // Update is called once per frame
     void Update()
     {
         HandleAddingLineSegment();
+    }
+
+    public void SetColor(Color c)
+    {
+        WireColor = c;
+        MyLineRenderer.startColor = WireColor;
+        MyLineRenderer.endColor   = WireColor;
+        fgSprite.color = WireColor;
+
+    }
+
+    public Color GetColor()
+    {
+        Debug.Log("WireColor:" + WireColor);
+        return WireColor;
     }
 
     public void SetWireBase(Vector3 StartPos)

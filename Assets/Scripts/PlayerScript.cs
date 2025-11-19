@@ -115,8 +115,8 @@ public class PlayerScript : MonoBehaviour
         {
             if (GetComponent<BoxCollider2D>().IsTouchingLayers(WireSourceLayer))    //grab wire if not holding one already and if we're at a thing you can grab a wire from
             {
-                if (!isCarryingWire) {  //try to "pick up" a wire
-                    Assert.IsFalse(ActiveWireSpawner == null);  //todo: remove assertion once verified
+                Assert.IsFalse(ActiveWireSpawner == null);  //todo: remove assertion once verified
+                if (!isCarryingWire && ActiveWireSpawner.GetComponent<PlugScript>().IsColorAvailable()) {  //try to "pick up" a wire if we can
                     SpawnWire(ActiveWireSpawner);
                 }
             }
@@ -147,16 +147,27 @@ public class PlayerScript : MonoBehaviour
     }
 
     private void SpawnWire(GameObject WireSpawner)
-    {
+    {   
+        Assert.IsTrue(WireSpawner.GetComponent<PlugScript>().IsColorAvailable());  //dummy check
+
+        //this assumes we've already checked a wire is available before calling this, so make sure to do that
         Vector3 startPos = ActiveWireSpawner.transform.position;
         Vector3 spawnPos = transform.position + new Vector3(0, 1.5f, 0);
+        Color wireColor = ActiveWireSpawner.GetComponent<PlugScript>().GetCurrentColor();
 
         //the wire head is purely animation only, it will not alter collision hitboxes in any way so it doesn't need to be treated as a rigid body.
         //while holding it, the player will just always fix it to a fixed location relative to the player
         //eventually, we'll replace this with a new animation of the player holding the wire and then it'll only be the ine renderer.
         CurrentWire = Instantiate(WirePrefab, spawnPos, Quaternion.identity);
         CurrentWire.GetComponent<WireScript>().SetWireBase(startPos);
+        CurrentWire.GetComponent<WireScript>().SetColor(wireColor);
         PickUpWire(CurrentWire);
+
+        WireSpawner.GetComponent<PlugScript>().RemoveCurColor();
+
+
+        //now, tell the spawner we picked it up
+
 
     }
 
@@ -172,8 +183,20 @@ public class PlayerScript : MonoBehaviour
         isCarryingWire = false;
         TargetTerminal.GetComponent<PowerTermScript>().PowerOn();
         TargetTerminal.GetComponent<PowerTermScript>().CurrentWire = CurrentWire;   //save a reference to the wire here
-        CurrentWire.GetComponent<WireScript>().SnapToPosition(TargetTerminal, new Vector3(-.75f, 0, 0));    //todo: play around with different offsets
+        CurrentWire.GetComponent<WireScript>().SnapToPosition(TargetTerminal, new Vector3(-.05f, 0, 0));    //todo: play around with different offsets
         
+
+    }
+
+    public Color GetCarriedColor()
+    {
+        //returns the color of the wire we're carrying, if any
+        if (!isCarryingWire)
+        {
+            return Color.white;
+        }
+
+        return CurrentWire.GetComponent<WireScript>().GetColor();
 
     }
 

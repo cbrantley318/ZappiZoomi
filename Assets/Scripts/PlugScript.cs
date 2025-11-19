@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Xml.Serialization;
 using UnityEngine;
 using UnityEngine.Assertions;
 
@@ -14,6 +15,7 @@ public class PlugScript : MonoBehaviour
     private SpriteRenderer PowerSymbol;
 
     private Color ActiveColor;
+    private int ActiveColorIndex = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -37,8 +39,9 @@ public class PlugScript : MonoBehaviour
         }
 
         Assert.IsTrue(numColors > 0);   //make sure we didnt screw up in the inspector
-        ActiveColor = availableColors[0];
-        PowerSymbol.color = ActiveColor;    //set the color aesthetically
+        SetActiveColor(availableColors[ActiveColorIndex]);
+
+
 
 
 
@@ -71,15 +74,33 @@ public class PlugScript : MonoBehaviour
         }
     }
 
-    public void isColorAvailable()
+    private void SetActiveColor(Color c)
     {
-
+        ActiveColor = c;
+        PowerSymbol.color = ActiveColor;    //set the color aesthetically
     }
 
-    public void removeCurColor()
+    public bool IsColorAvailable()
     {
-        //TODO: this is a function that, when called, will remove the color from the freecolors, change the current color to the next one, or
-        // if no more available, grey out the power box to show it's empty
+        return ActiveColorIndex < numColors;
+    }
+
+    public Color GetCurrentColor()
+    {
+        return ActiveColor;
+    }
+
+    public void RemoveCurColor()
+    {
+        if (ActiveColorIndex < numColors-1)
+        {
+            ActiveColorIndex++;
+            SetActiveColor(availableColors[ActiveColorIndex]);
+        } else
+        {
+            SetActiveColor(Color.grey);
+        }
+
     }
 
 }
