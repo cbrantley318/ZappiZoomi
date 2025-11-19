@@ -8,7 +8,14 @@ public class CameraScript : MonoBehaviour
     public float smoothSpeed = 5f;
     public Vector3 offset;
     public float threshold;
-    [SerializeField] int MapL, MapR, MapU, MapD;  
+
+    // camera limits (in inspector)
+    public float minX;
+    public float maxX;
+    public float minY;
+    public float maxY;
+
+  
 
     void LateUpdate()
     {
@@ -19,6 +26,10 @@ public class CameraScript : MonoBehaviour
 
         // z fixed so camera doesn’t drift
         desiredPosition.z = transform.position.z;
+
+        // clamp inside camera limits
+        desiredPosition.x = Mathf.Clamp(desiredPosition.x, minX, maxX);
+        desiredPosition.y = Mathf.Clamp(desiredPosition.y, minY, maxY);
 
         // move camera toward GameObject
 
