@@ -7,14 +7,20 @@ using UnityEngine.Assertions;
 
 public class PlayerScript : MonoBehaviour
 {
+    //GameObjects
     [SerializeField] GameObject PlayerFeet;
     [SerializeField] GameObject WirePrefab;
+
+    //layers
     [SerializeField] LayerMask GroundLayers;    //the layers the player can jump from
     [SerializeField] LayerMask MovingPlatform;  //layers that we snap our velocity to. Note that if we change the player physics to acceleration instead of velocity-based, this could possibly cause some weird stuff
     [SerializeField] LayerMask WireSourceLayer;
     [SerializeField] LayerMask WireTerminalLayer;
+
+    //physics/movement
     [SerializeField] float jumpVelocity = 10;
     [SerializeField] float moveVelocity = 5;    //technically speed not velocity
+    [SerializeField] float moveAccel    = 0.5f;
 
 
 
@@ -24,11 +30,9 @@ public class PlayerScript : MonoBehaviour
 
 
     //things local to the player object
-
     private BoxCollider2D MyFeetHitbox;
     private Rigidbody2D MyRigidBody;
 
-    //private bool isOnGround = false;
     private bool isCarryingWire = false;
 
     //things that we get from other objects
@@ -50,12 +54,12 @@ public class PlayerScript : MonoBehaviour
         HandleWires();
 
         CheckDynamicCollisions();   //for now this is just if we're touching elevators
-                                    //TODO: add the 'touching wire terminal' to this bit
+                                    //TODO: add the 'touching wire terminal' to this bit (lol jk it's implemented elsewhere)
         CheckPlayerInput();         //for moving and jumping and (eventually) grabbing wires and placing them and probably a pause screen as well
 
     }
 
-    //technically both of these oncollision checks serve no prupose, but leaving it here in case we want to use it for something else
+    //technically both of these oncollision checks serve no purpose, but leaving it here in case we want to use it for something else
     //private void OnCollisionEnter2D(Collision2D collision)
     //{
     //    // Check if the collided object's layer is within the targetLayer mask  //gotta love AI-generated comments lol

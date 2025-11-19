@@ -4,14 +4,23 @@ using UnityEngine;
 
 public class PlugScript : MonoBehaviour
 {
+
+    [SerializeField] List<Color> availableColors;
+
+    private int numColors = 0;
+    private List<bool> freeColors;
+
     // Start is called before the first frame update
     void Start()
     {
-        //TODO: make this have a child gameobject called like "interactiveBox" or something idk
-        //player can walk up to it and press "Z" to spawn a new wire in and grab it
-        //if they aren't holding a wire, they can walk up to and press "X" to cycle the color it outputs?
-        //when the new wire is spawned, it will exist on its own / independent of this thingamabob
-        //okay also the spawning logic will likely happen in the player script, not in this script
+        numColors = availableColors.Count;  //note: doesn't track which color was taken, maybe make this a "valid" array later on
+        freeColors = new List<bool>();
+        foreach (Color c in availableColors)
+        {
+            freeColors.Add(true);   //all specified colors start out available
+        }
+        //all this does rn is tell the player that this is the active box location, will eventually need to edit this to keep track of how many are available
+        //and what colors are available
     }
 
     // Update is called once per frame
