@@ -4,6 +4,9 @@ using Unity.VisualScripting;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.Assertions;
+using UnityEngine.SceneManagement;
+
+
 
 public class PlayerScript : MonoBehaviour
 {
@@ -14,6 +17,8 @@ public class PlayerScript : MonoBehaviour
     //layers
     [SerializeField] LayerMask GroundLayers;    //the layers the player can jump from
     [SerializeField] LayerMask MovingPlatform;  //layers that we snap our velocity to. Note that if we change the player physics to acceleration instead of velocity-based, this could possibly cause some weird stuff
+    [SerializeField] LayerMask InstantDeathLayer;
+    [SerializeField] LayerMask ElectrocutionLayer;
     [SerializeField] LayerMask WireSourceLayer;
     [SerializeField] LayerMask WireTerminalLayer;
 
@@ -59,16 +64,22 @@ public class PlayerScript : MonoBehaviour
 
     }
 
-    //technically both of these oncollision checks serve no purpose, but leaving it here in case we want to use it for something else
-    //private void OnCollisionEnter2D(Collision2D collision)
-    //{
-    //    // Check if the collided object's layer is within the targetLayer mask  //gotta love AI-generated comments lol
-    //    if (((1 << collision.gameObject.layer) & GroundLayer) != 0)
-    //    {
-    //        isOnGround = true;
-    //    }
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        // Check if the collided object's layer is within the targetLayer mask  //gotta love AI-generated comments lol
+        //if (((1 << collision.gameObject.layer) & InstantDeathLayer) != 0)     //once again, polling proves better than interrupts
+        //{
+        //    KillPlayer();
+        //}
+        //if (((1 << collision.gameObject.layer) & ElectrocutionLayer) != 0)
+        //{
+        //    if (isCarryingWire)
+        //    {
+        //        KillPlayer();
+        //    }
+        //}
 
-    //}
+    }
 
     //private void OnCollisionExit2D(Collision2D collision)
     //{
@@ -87,6 +98,10 @@ public class PlayerScript : MonoBehaviour
         }
     }
 
+    //- END COLLISIONS ----//
+
+
+    //--------- CONTROL INPUT HELPERS and motion/physics-----------//
     void CheckPlayerInput()
     {
         /*-----MOTION---------*/
@@ -135,6 +150,49 @@ public class PlayerScript : MonoBehaviour
 
     }
 
+
+
+    private void CheckDynamicCollisions()
+    {
+        //make velocity same as the elevator's
+        if (movingPlatformBody != null && MyFeetHitbox.IsTouchingLayers(MovingPlatform))
+        {
+            transform.SetParent(movingPlatformBody.gameObject.transform);
+            //MyRigidBody.velocity = movingPlatformBody.velocity;     //todo: fix problem of jumping and moving off of this without it snapping the player back down
+        }
+        else
+        {
+            transform.SetParent(null);
+        }
+
+        BoxCollider2D MyHitbox = GetComponent<BoxCollider2D>();
+
+        if (MyHitbox.IsTouchingLayers(InstantDeathLayer))
+        {
+            KillPlayer();
+        }
+
+        if (isCarryingWire && MyHitbox.IsTouchingLayers(ElectrocutionLayer))
+        {
+            KillPlayer();
+        }
+
+
+
+        //TODO: check for the "WireSource" layer and the "WireTerminal" layer (also create those layers in the Inspector
+        // (idk why i said to check for them here... for now will not include)
+    }
+
+    //- END CONTROL INPUT HELPERS ----//
+
+    //-------- PLAYER STATE ----------------------//
+    void KillPlayer()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+    //- END PLAYER STATE -----//
+
+    //--------- WIRE INTERACTION HELPERS --------//
     private void HandleWires()
     {
         if (isCarryingWire)
@@ -176,18 +234,16 @@ public class PlayerScript : MonoBehaviour
 
     private void PlaceWire(GameObject TargetTerminal)
     {
+        //places a wire at the target terminal, "setting it free" from the player and letting it exist until we pick it up again from there
         PowerTermScript pts = TargetTerminal.GetComponent<PowerTermScript>();
         WireScript ws = CurrentWire.GetComponent<WireScript>();
-        //places a wire at the target terminal, "setting it free" from the player and letting it exist until we pick it up again from there
         if (pts.GetColor() == ws.GetColor())
         {
             isCarryingWire = false;
             pts.PowerOn();
-            TargetTerminal.GetComponent<PowerTermScript>().CurrentWire = CurrentWire;   //save a reference to the wire here
-            CurrentWire.GetComponent<WireScript>().SnapToPosition(TargetTerminal, new Vector3(-.05f, 0, 0));    //todo: play around with different offsets
+            pts.CurrentWire = CurrentWire;   //save a reference to the wire here
+            ws.SnapToPosition(TargetTerminal, new Vector3(-.05f, 0, 0));    //todo: play around with different offsets
         }
-
-
     }
 
     public Color GetCarriedColor()
@@ -200,21 +256,6 @@ public class PlayerScript : MonoBehaviour
 
         return CurrentWire.GetComponent<WireScript>().GetColor();
 
-    }
-
-    private void CheckDynamicCollisions()
-    {
-        //make velocity same as the elevator's
-        if (movingPlatformBody != null && MyFeetHitbox.IsTouchingLayers(MovingPlatform))
-        {
-            transform.SetParent(movingPlatformBody.gameObject.transform);
-            //MyRigidBody.velocity = movingPlatformBody.velocity;     //todo: fix problem of jumping and moving off of this without it snapping the player back down
-        } else
-        {
-            transform.SetParent(null);
-        }
-
-        //TODO: check for the "WireSource" layer and the "WireTerminal" layer (also create those layers in the Inspector
     }
 
     private void HandleWireTermInteraction()
@@ -246,6 +287,7 @@ public class PlayerScript : MonoBehaviour
 
     }
 
+    //- END WIRE INTERACTION HELPERS --//
 
 
 
