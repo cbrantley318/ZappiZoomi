@@ -18,9 +18,9 @@ public class PlayerScript : MonoBehaviour
     [SerializeField] LayerMask WireTerminalLayer;
 
     //physics/movement
-    [SerializeField] float jumpVelocity = 10;
-    [SerializeField] float moveVelocity = 5;    //technically speed not velocity
-    [SerializeField] float moveAccel    = 0.5f;
+    [SerializeField] float jumpVelocity;    //10
+    [SerializeField] float moveVelocity;    //5
+    [SerializeField] float moveAccel;       //0.5
 
 
 
@@ -126,11 +126,8 @@ public class PlayerScript : MonoBehaviour
                 
             } else if (isCarryingWire)
             {
-                //if holding a wire and there's no terminals or sources nearby, then maybe let the player drop it?
+                //if holding a wire and there's no terminals or sources nearby, then maybe let the player drop it? (currently does nothing)
                 //Debug.Log("Not touching term layer");
-                //TODO: just drop the wire on the ground and stop carrying it
-                //the caveat is that currently it can only be picked up from another terminal (i.e. the wire itself has no collisions at all
-                //so maybe just don't let them drop the wires, especially because I can't think of any scenario that would help
             }
         }
 
@@ -179,12 +176,17 @@ public class PlayerScript : MonoBehaviour
 
     private void PlaceWire(GameObject TargetTerminal)
     {
+        PowerTermScript pts = TargetTerminal.GetComponent<PowerTermScript>();
+        WireScript ws = CurrentWire.GetComponent<WireScript>();
         //places a wire at the target terminal, "setting it free" from the player and letting it exist until we pick it up again from there
-        isCarryingWire = false;
-        TargetTerminal.GetComponent<PowerTermScript>().PowerOn();
-        TargetTerminal.GetComponent<PowerTermScript>().CurrentWire = CurrentWire;   //save a reference to the wire here
-        CurrentWire.GetComponent<WireScript>().SnapToPosition(TargetTerminal, new Vector3(-.05f, 0, 0));    //todo: play around with different offsets
-        
+        if (pts.GetColor() == ws.GetColor())
+        {
+            isCarryingWire = false;
+            pts.PowerOn();
+            TargetTerminal.GetComponent<PowerTermScript>().CurrentWire = CurrentWire;   //save a reference to the wire here
+            CurrentWire.GetComponent<WireScript>().SnapToPosition(TargetTerminal, new Vector3(-.05f, 0, 0));    //todo: play around with different offsets
+        }
+
 
     }
 
@@ -232,7 +234,7 @@ public class PlayerScript : MonoBehaviour
                 PickUpWire(ActiveWireTerminal.GetComponent<PowerTermScript>().CurrentWire);
                 ActiveWireTerminal.GetComponent<PowerTermScript>().PowerOff();
                 break;
-            case 2:         //10 = place down wire
+            case 2:         //10 = place down wire (ONLY IF COLORS MATCH)
                 PlaceWire(ActiveWireTerminal);
                 break;
             case 3:         //11 = do nothing for now (maybe swap later?)

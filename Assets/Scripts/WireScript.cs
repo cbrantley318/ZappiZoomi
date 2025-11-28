@@ -51,7 +51,7 @@ public class WireScript : MonoBehaviour
 
     public Color GetColor()
     {
-        Debug.Log("WireColor:" + WireColor);
+        //Debug.Log("WireColor:" + WireColor);
         return WireColor;
     }
 
