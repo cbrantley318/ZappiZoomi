@@ -15,6 +15,15 @@ public class ElevatorPlatform : MonoBehaviour
     private Vector3 startPosition;
     private Rigidbody2D MyRigidBody;
 
+    //TODO: multiple possible changes (listed below, all optional so idk):
+    /*
+     * Add a flag for it to function as a gate or an elevator (move up and down or hold position at top)
+     * Change the script from using PingPong timer function to smoother motion w/ setting velocity in direction of target
+     * Add a linerenderer child to this and let it follow the points set by that line (allows us to set the path in the editor visually and also to add
+     * more than two endpoints)
+     * Add an InstantDeathZone Trigger below the elevator to kill the player (maybe don't make this part of the prefab, just for the one instance)
+     */
+
     private int moveDirection = 1;  //1 is up, 0 is back
     private GameObject parentObj;
 
