@@ -38,7 +38,9 @@ public class PlayerScript : MonoBehaviour
     private BoxCollider2D MyFeetHitbox;
     private Rigidbody2D MyRigidBody;
 
+    //wire management
     private bool isCarryingWire = false;
+    private Vector3 holdWirePosition = new Vector3(0.2f, 0.3f, 0);
 
     //things that we get from other objects
     private GameObject CurrentWire;
@@ -109,7 +111,7 @@ public class PlayerScript : MonoBehaviour
         {
             MyRigidBody.AddForce(moveAccel * Vector2.left, ForceMode2D.Force);
             //MyRigidBody.velocity = new Vector2(-moveVelocity, MyRigidBody.velocity.y);
-            if (MyRigidBody.velocity.magnitude > moveVelocity)
+            if (Mathf.Abs(MyRigidBody.velocity.x) > moveVelocity)
             {
                 MyRigidBody.velocity = new Vector2(-moveVelocity, MyRigidBody.velocity.y);
             }
@@ -119,7 +121,7 @@ public class PlayerScript : MonoBehaviour
         if (Input.GetKey(KeyCode.RightArrow))   //move right
         {
             MyRigidBody.AddForce(moveAccel * Vector2.right, ForceMode2D.Force);
-            if (MyRigidBody.velocity.magnitude > moveVelocity)
+            if (Mathf.Abs(MyRigidBody.velocity.x) > moveVelocity)
             {
                 MyRigidBody.velocity = new Vector2(moveVelocity, MyRigidBody.velocity.y);
             }
@@ -207,7 +209,7 @@ public class PlayerScript : MonoBehaviour
     {
         if (isCarryingWire)
         {
-            CurrentWire.transform.position = transform.position + new Vector3(0, 1.5f, 0);
+            CurrentWire.transform.position = transform.position + holdWirePosition;
         }
     }
 
@@ -217,7 +219,7 @@ public class PlayerScript : MonoBehaviour
 
         //this assumes we've already checked a wire is available before calling this, so make sure to do that
         Vector3 startPos = ActiveWireSpawner.transform.position;
-        Vector3 spawnPos = transform.position + new Vector3(0, 1.5f, 0);
+        Vector3 spawnPos = transform.position + holdWirePosition;
         Color wireColor = ActiveWireSpawner.GetComponent<PlugScript>().GetCurrentColor();
 
         //the wire head is purely animation only, it will not alter collision hitboxes in any way so it doesn't need to be treated as a rigid body.

@@ -242,6 +242,7 @@ MonoBehaviour:
   speed: 2
   moveDistance: 3
   pingpong: 1
+  pauseInterval: 0.2
 --- !u!61 &888140356219377552
 BoxCollider2D:
   m_ObjectHideFlags: 0
