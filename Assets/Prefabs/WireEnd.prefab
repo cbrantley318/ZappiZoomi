@@ -182,7 +182,7 @@ LineRenderer:
       m_NumAlphaKeys: 2
     numCornerVertices: 8
     numCapVertices: 8
-    alignment: 1
+    alignment: 0
     textureMode: 0
     textureScale: {x: 1, y: 1}
     shadowBias: 0.5

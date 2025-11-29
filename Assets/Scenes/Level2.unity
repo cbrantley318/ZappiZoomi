@@ -7874,6 +7874,10 @@ PrefabInstance:
       propertyPath: availableColors.Array.data[1].r
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5211888802540389874, guid: e639d09084786494094011e0b7d664d2, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 5331854397999974157, guid: e639d09084786494094011e0b7d664d2, type: 3}
       propertyPath: m_LocalPosition.x
       value: -9.86

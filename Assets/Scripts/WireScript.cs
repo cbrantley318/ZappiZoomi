@@ -14,7 +14,11 @@ public class WireScript : MonoBehaviour
     [SerializeField] LayerMask WireTerminalLayer;   //maybe make this both wire source and wire terminal, idk yet but change in Inspector
 
     //private bool hasPower = true;   //in case we want to play around later with some wires being duds, I guess
-    //private float segmentLength = 1.0f;
+    private float segmentLength = 2.0f;
+    private float recombineLength = 1.75f;
+
+    //[SerializeField] int maxNumLinks;     //NEITHER OF THESE CAN BE IMPLEMENTED UNTIL WE ADD ABILITY TO PLACE WIRES BACK IN THE SPAWNER / RESET WIRE STATES WITHOUT DYING
+    //[SerializeField] int maxLength;       //I MEAN IT CAN... BUT IT WON'T BE GOOD GAMEPLAY UNLESS YOU MAKE IT EASY TO UNDO ERRORS
 
     private Color WireColor;    //this is set by SpawnWire, and it's used to determine where you can shove it
 
@@ -26,7 +30,6 @@ public class WireScript : MonoBehaviour
         WireColor = Color.white;    //default val
         MyLineRenderer = GetComponent<LineRenderer>();  //needs to be called before instantiate returns
         fgSprite = transform.GetChild(0).GetComponent<SpriteRenderer>(); //this one doesnt but whatever, maybe it does
-
     }
 
 
@@ -64,12 +67,40 @@ public class WireScript : MonoBehaviour
 
     private void HandleAddingLineSegment()
     {
-        //Vector3 lastPos = MyLineRenderer.GetPosition(MyLineRenderer.positionCount - 2);           //TODO: add this in if you want segmented lines instead of a straight shot
-                                                                                                    //(note that they aren't affected by gravity as a LineRenderer, would need chain physics for that)
-        //if ((lastPos-transform.position).magnitude > segmentLength)
-        //{
-        //    MyLineRenderer.positionCount++;
-        //} //add in ability to delete segments if less than a threshold
+        //here are the rules for segments:
+        /*
+         * The player location is at MLR.positionCount - 1
+         * The one right before is MLR.pCt - 2
+         * The one before that is MLR.pCt - 3
+         * The source is at index 0
+         * 
+         * Whenever the distance between PC-1 and PC-2 exceeds newThresh, we spawn a new segment
+         * 
+         * Whenever the distance between PC-1 and PC-3 is less than a minThresh, we remove PC-2
+         * Could also adapt the above to be if the distance between PC-1 and ANY point that isnt PC-2 is small, collapse it all down (i.e. if we have 5 links and loop back to the start)
+         * 
+         * Should work with no bugs as long as minThresh is small compared to newThresh
+         * Would probably work fine even if that wasn't true
+         * Will need to ensure count > 2 to do the collapsing
+         * 
+         */
+
+        Vector3 lastPos = MyLineRenderer.GetPosition(MyLineRenderer.positionCount - 2);           //TODO: add this in if you want segmented lines instead of a straight shot
+        if ((lastPos - transform.position).magnitude > segmentLength)
+        {
+            MyLineRenderer.positionCount++;
+        }
+
+        if (MyLineRenderer.positionCount > 2)   //try removing segments
+        {
+            Vector3 skipPos = MyLineRenderer.GetPosition(MyLineRenderer.positionCount - 3);           //TODO: add this in if you want segmented lines instead of a straight shot
+            if ((transform.position - skipPos).magnitude < recombineLength)
+            {
+                MyLineRenderer.positionCount--; //should be easy as that. let's watch it burn
+            }
+        }
+
+
         MyLineRenderer.SetPosition(MyLineRenderer.positionCount - 1, transform.position);
     }
 
