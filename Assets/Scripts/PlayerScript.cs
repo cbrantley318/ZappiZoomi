@@ -107,14 +107,22 @@ public class PlayerScript : MonoBehaviour
         /*-----MOTION---------*/
         if (Input.GetKey(KeyCode.LeftArrow))    //move left (no acceleration yet, just barebones for debugging until Hanchi pushes his code)
         {
-            MyRigidBody.velocity = new Vector2(-moveVelocity, MyRigidBody.velocity.y);
+            MyRigidBody.AddForce(moveAccel * Vector2.left, ForceMode2D.Force);
+            //MyRigidBody.velocity = new Vector2(-moveVelocity, MyRigidBody.velocity.y);
+            if (MyRigidBody.velocity.magnitude > moveVelocity)
+            {
+                MyRigidBody.velocity = new Vector2(-moveVelocity, MyRigidBody.velocity.y);
+            }
 
         }
 
         if (Input.GetKey(KeyCode.RightArrow))   //move right
         {
-            MyRigidBody.velocity = new Vector2(moveVelocity, MyRigidBody.velocity.y);
-
+            MyRigidBody.AddForce(moveAccel * Vector2.right, ForceMode2D.Force);
+            if (MyRigidBody.velocity.magnitude > moveVelocity)
+            {
+                MyRigidBody.velocity = new Vector2(moveVelocity, MyRigidBody.velocity.y);
+            }
         }
 
         if (Input.GetKeyDown(KeyCode.Space))    //jump
@@ -128,18 +136,19 @@ public class PlayerScript : MonoBehaviour
         /*-----Grabbing Things---------*/
         if (Input.GetKeyDown(KeyCode.Z))    //grab wire if not holding one already
         {
-            if (GetComponent<BoxCollider2D>().IsTouchingLayers(WireSourceLayer))    //grab wire if not holding one already and if we're at a thing you can grab a wire from
-            {
-                Assert.IsFalse(ActiveWireSpawner == null);  //todo: remove assertion once verified
-                if (!isCarryingWire && ActiveWireSpawner.GetComponent<PlugScript>().IsColorAvailable()) {  //try to "pick up" a wire if we can
-                    SpawnWire(ActiveWireSpawner);
-                }
-            }
             if (GetComponent<BoxCollider2D>().IsTouchingLayers(WireTerminalLayer))  //if it's touching one of these layers, we have two options (see below)
             {
                 HandleWireTermInteraction();
-                
-            } else if (isCarryingWire)
+            }
+            else if (GetComponent<BoxCollider2D>().IsTouchingLayers(WireSourceLayer))    //grab wire if not holding one already and if we're at a thing you can grab a wire from
+            {
+                Assert.IsFalse(ActiveWireSpawner == null);  //todo: remove assertion once verified
+                if (!isCarryingWire && ActiveWireSpawner.GetComponent<PlugScript>().IsColorAvailable())
+                {  //try to "pick up" a wire if we can
+                    SpawnWire(ActiveWireSpawner);
+                }
+            }
+            else if (isCarryingWire)
             {
                 //if holding a wire and there's no terminals or sources nearby, then maybe let the player drop it? (currently does nothing)
                 //Debug.Log("Not touching term layer");
@@ -187,7 +196,8 @@ public class PlayerScript : MonoBehaviour
 
     //-------- PLAYER STATE ----------------------//
     void KillPlayer()
-    {
+    {   
+        //TODO: add in a death animation or something to hide the latency (maybe just a UI popup yeah that's easy).
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
     //- END PLAYER STATE -----//

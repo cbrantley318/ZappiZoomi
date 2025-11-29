@@ -25,7 +25,7 @@ public class ElevatorPlatform : MonoBehaviour
     private List<Vector3> path;
     private bool goingUp = true;    //start out incrementing path, when you hit the top pause and then go down, then go back
     private float pauseTime;
-    private float pauseInterval = 0.2f; //pause duration (in seconds!)
+    [SerializeField] float pauseInterval = 0.2f; //pause duration (in seconds!)
     private int currPos = 0;
 
     private int moveDirection = 1;  //1 is up, 0 is back (dont edit this even though it's pretty much identical to goingUp
@@ -78,17 +78,20 @@ public class ElevatorPlatform : MonoBehaviour
         {
             //move to the next position
 
-            //if (Time.time - pauseTime > pauseInterval)  //if 
-            //{
+            if (Time.time - pauseTime > pauseInterval)  //if 
+            {
                 //allow movement once we've paused long enough
                 if (goingUp)
                 {
                     MoveUp(pingpong);   //handles the logic for incrementing state and telling us when to move
-                } else
+                }
+                else
                 {
                     MoveDown(pingpong);
                 }
-        } else
+            }
+        }
+        else
         {
             MoveDown(false);
         }
@@ -114,7 +117,6 @@ public class ElevatorPlatform : MonoBehaviour
                 if (continueMotion)     //if false, will always stay here (for the non-elevator methods
                 {
                     goingUp = false;    //start moving elevator back down
-                    Debug.Log("Going Down");
                 }
                 MyRigidBody.velocity = Vector3.zero;   //stop moving and pause
                 pauseTime = Time.time;
@@ -125,12 +127,6 @@ public class ElevatorPlatform : MonoBehaviour
             }
         } else
         {
-            Debug.Log("------------");
-            Debug.Log(MyRigidBody.transform.position);
-            Debug.Log(path[currPos]);
-            Debug.Log((MyRigidBody.transform.position - path[currPos]).magnitude);
-            Debug.Log("------------");
-
             MyRigidBody.velocity = speed * (path[currPos] - transform.position).normalized;   //path[0] is the startPosition now
         }
 
@@ -151,7 +147,6 @@ public class ElevatorPlatform : MonoBehaviour
                 if (continueMotion)     //if false, will always stay here (for the non-elevator methods
                 {
                     goingUp = true;    //start moving elevator back down
-                    Debug.Log("Going Up");
                 }
                 MyRigidBody.velocity = Vector3.zero;   //stop moving and pause
                 pauseTime = Time.time;
