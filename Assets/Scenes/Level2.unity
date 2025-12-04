@@ -16455,6 +16455,8 @@ MonoBehaviour:
   CurrentWire: {fileID: 0}
   isButton: 0
   termColor: {r: 0, g: 0, b: 0, a: 0}
+  poweredOnMat: {fileID: 0}
+  poweredOffMat: {fileID: 0}
 --- !u!212 &2067088926
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -16577,6 +16579,38 @@ PrefabInstance:
     - target: {fileID: 7228099974774441043, guid: 905da035d46f7460db49b0c51a74c1d3, type: 3}
       propertyPath: m_Layer
       value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 8117386186556794421, guid: 905da035d46f7460db49b0c51a74c1d3, type: 3}
+      propertyPath: m_CompositePaths.m_Paths.Array.data[0].Array.data[0].x
+      value: 2.1491697
+      objectReference: {fileID: 0}
+    - target: {fileID: 8117386186556794421, guid: 905da035d46f7460db49b0c51a74c1d3, type: 3}
+      propertyPath: m_CompositePaths.m_Paths.Array.data[0].Array.data[1].x
+      value: 2.1491697
+      objectReference: {fileID: 0}
+    - target: {fileID: 8117386186556794421, guid: 905da035d46f7460db49b0c51a74c1d3, type: 3}
+      propertyPath: m_CompositePaths.m_Paths.Array.data[0].Array.data[2].x
+      value: -0.9059482
+      objectReference: {fileID: 0}
+    - target: {fileID: 8117386186556794421, guid: 905da035d46f7460db49b0c51a74c1d3, type: 3}
+      propertyPath: m_CompositePaths.m_Paths.Array.data[0].Array.data[3].x
+      value: -0.9059189
+      objectReference: {fileID: 0}
+    - target: {fileID: 8117386186556794421, guid: 905da035d46f7460db49b0c51a74c1d3, type: 3}
+      propertyPath: m_ColliderPaths.Array.data[0].m_ColliderPaths.Array.data[0].Array.data[0].X
+      value: 21491990
+      objectReference: {fileID: 0}
+    - target: {fileID: 8117386186556794421, guid: 905da035d46f7460db49b0c51a74c1d3, type: 3}
+      propertyPath: m_ColliderPaths.Array.data[0].m_ColliderPaths.Array.data[0].Array.data[1].X
+      value: -9059482
+      objectReference: {fileID: 0}
+    - target: {fileID: 8117386186556794421, guid: 905da035d46f7460db49b0c51a74c1d3, type: 3}
+      propertyPath: m_ColliderPaths.Array.data[0].m_ColliderPaths.Array.data[0].Array.data[2].X
+      value: -9059482
+      objectReference: {fileID: 0}
+    - target: {fileID: 8117386186556794421, guid: 905da035d46f7460db49b0c51a74c1d3, type: 3}
+      propertyPath: m_ColliderPaths.Array.data[0].m_ColliderPaths.Array.data[0].Array.data[3].X
+      value: 21491990
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

@@ -9,7 +9,7 @@ public class PowerTermScript : MonoBehaviour
     [HideInInspector] public bool poweredOn;
     [HideInInspector] public GameObject CurrentWire;
     [SerializeField] bool isButton;             //should be false for everything except (except what? hmmm?)
-    [SerializeField] Color termColor;           //TODO: add in multiple colors (done!)
+    [SerializeField] Color termColor;           //TODO: add in multiple colors
 
     [SerializeField] Material poweredOnMat;     //for fun lighting effects
     [SerializeField] Material poweredOffMat;

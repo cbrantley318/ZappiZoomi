@@ -197,11 +197,11 @@ public class PlayerScript : MonoBehaviour
             KillPlayer();
         }
 
-        if (!levelCompleted && MyHitbox.IsTouchingLayers(LevelEndLayer))
-        {
-            levelCompleted = true;
-            OnLevelComplete();
-        }
+        //if (!levelCompleted && MyHitbox.IsTouchingLayers(LevelEndLayer))      //moved to LevelEndScript
+        //{
+        //    levelCompleted = true;
+        //    OnLevelComplete();
+        //}
 
 
 
@@ -316,39 +316,6 @@ public class PlayerScript : MonoBehaviour
 
     //- END WIRE INTERACTION HELPERS --//
 
-    void OnLevelComplete()
-    {
-        // Save progress (if you have ProgressManager)
-        // if (ProgressManager.Instance != null)
-        // {
-        //     ProgressManager.Instance.CompleteEpisode(episodeToComplete);
-        // }
-
-        // Optionally disable player movement immediately so nothing else happens
-        // You can disable this GameObject or set a flag — here we disable this script
-        this.enabled = false;
-
-        // Optionally play a sfx or animation here, then show modal after delay
-        if (levelCompleteDelay > 0f)
-            Invoke(nameof(ShowLevelWonModal), levelCompleteDelay);
-        else
-            ShowLevelWonModal();
-    }
-
-    void ShowLevelWonModal()
-    {
-        // Prefer using your PersistentUIManager so the modal blocks input consistently
-        if (PersistentUIManager.Instance != null)
-        {
-            PersistentUIManager.Instance.ShowLevelWon();
-        }
-        else
-        {
-            // Fallback: pause the game and log
-            Time.timeScale = 0f;
-            Debug.Log("Level complete - PersistentUIManager not found.");
-        }
-    }
 
 
 
