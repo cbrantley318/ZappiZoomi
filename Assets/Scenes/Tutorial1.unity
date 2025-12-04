@@ -24853,7 +24853,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4492136200726811451, guid: e639d09084786494094011e0b7d664d2, type: 3}
       propertyPath: availableColors.Array.size
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4492136200726811451, guid: e639d09084786494094011e0b7d664d2, type: 3}
       propertyPath: availableColors.Array.data[0].a

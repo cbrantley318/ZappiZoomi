@@ -27,6 +27,7 @@ public class PlayerScript : MonoBehaviour
     [SerializeField] float jumpVelocity;    //10
     [SerializeField] float moveVelocity;    //5
     [SerializeField] float moveAccel;       //0.5
+    [SerializeField] float airLoss;       //0.5
 
 
 
@@ -116,24 +117,21 @@ public class PlayerScript : MonoBehaviour
     void CheckPlayerInput()
     {
         /*-----MOTION---------*/
+        float xSpeed = Mathf.Abs(MyRigidBody.velocity.x);
+        float accel = (MyFeetHitbox.IsTouchingLayers(GroundLayers)) ? moveAccel : airLoss * moveAccel;
+
         if (Input.GetKey(KeyCode.LeftArrow))    //move left (no acceleration yet, just barebones for debugging until Hanchi pushes his code)
         {
-            MyRigidBody.AddForce(moveAccel * Vector2.left, ForceMode2D.Force);
-            //MyRigidBody.velocity = new Vector2(-moveVelocity, MyRigidBody.velocity.y);
-            if (Mathf.Abs(MyRigidBody.velocity.x) > moveVelocity)
-            {
-                MyRigidBody.velocity = new Vector2(-moveVelocity, MyRigidBody.velocity.y);
-            }
-
+            MyRigidBody.AddForce(accel * Vector2.left, ForceMode2D.Force);
         }
-
         if (Input.GetKey(KeyCode.RightArrow))   //move right
         {
-            MyRigidBody.AddForce(moveAccel * Vector2.right, ForceMode2D.Force);
-            if (Mathf.Abs(MyRigidBody.velocity.x) > moveVelocity)
-            {
-                MyRigidBody.velocity = new Vector2(moveVelocity, MyRigidBody.velocity.y);
-            }
+            MyRigidBody.AddForce(accel * Vector2.right, ForceMode2D.Force);
+        }
+
+        if (xSpeed > moveVelocity)
+        {
+            MyRigidBody.velocity = (MyRigidBody.velocity / xSpeed) * moveVelocity;
         }
 
         if (Input.GetKeyDown(KeyCode.Space))    //jump

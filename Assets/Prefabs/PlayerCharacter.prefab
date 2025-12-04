@@ -266,7 +266,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDrag: 0
   m_AngularDrag: 0.05
-  m_GravityScale: 1.5
+  m_GravityScale: 1.75
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -361,6 +361,7 @@ MonoBehaviour:
   jumpVelocity: 12
   moveVelocity: 5
   moveAccel: 5
+  airLoss: 0.2
   ActiveWireSpawner: {fileID: 0}
   ActiveWireTerminal: {fileID: 0}
   episodeToComplete: 1
