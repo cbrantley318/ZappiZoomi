@@ -91,8 +91,18 @@ public class WireScript : MonoBehaviour
             MyLineRenderer.positionCount++;
         }
 
+        //for (int i = 0; i < MyLineRenderer.positionCount - 2; i ++)
+        //{
+        //    Vector3 skipPos = MyLineRenderer.GetPosition(i);           //TODO: add this in if you want segmented lines instead of a straight shot
+        //    if ((transform.position - skipPos).magnitude < recombineLength)
+        //    {
+        //        MyLineRenderer.positionCount--; //should be easy as that. let's watch it burn
+        //    }
+        //}
+
         if (MyLineRenderer.positionCount > 2)   //try removing segments
         {
+
             Vector3 skipPos = MyLineRenderer.GetPosition(MyLineRenderer.positionCount - 3);           //TODO: add this in if you want segmented lines instead of a straight shot
             if ((transform.position - skipPos).magnitude < recombineLength)
             {

@@ -8,20 +8,29 @@ public class PowerTermScript : MonoBehaviour
 
     [HideInInspector] public bool poweredOn;
     [HideInInspector] public GameObject CurrentWire;
-    [SerializeField] bool isButton;             //should be false for everything except
-    [SerializeField] Color termColor;           //TODO: add in multiple colors
+    [SerializeField] bool isButton;             //should be false for everything except (except what? hmmm?)
+    [SerializeField] Color termColor;           //TODO: add in multiple colors (done!)
+
+    [SerializeField] Material poweredOnMat;     //for fun lighting effects
+    [SerializeField] Material poweredOffMat;
+
+    private LineRenderer powerLine;
+    private SpriteRenderer fgSprite;
 
     void Start()
     {
         poweredOn = false;
         //set the wire line and the terminal FG color to the active color (Red)
         //TODO: make a colors enum/lookup-table using only the allowed in-game colors instead of relying on us to set the color in unity manually
-        SpriteRenderer fgSprite = transform.GetChild(0).GetComponent<SpriteRenderer>();
-        LineRenderer powerLine = GetComponent<LineRenderer>();
+        fgSprite = transform.GetChild(0).GetComponent<SpriteRenderer>();
+        powerLine = GetComponent<LineRenderer>();
 
         fgSprite.color = termColor;
         powerLine.startColor = termColor;  //this would've been so helpful to know in my solo game
         powerLine.endColor = termColor;
+
+        fgSprite.material = poweredOffMat;
+        powerLine.material = poweredOffMat;
 
     }
 
@@ -34,11 +43,15 @@ public class PowerTermScript : MonoBehaviour
     public void PowerOn()
     {
         poweredOn = true;
+        fgSprite.material = poweredOnMat;
+        powerLine.material = poweredOnMat;
     }
 
     public void PowerOff()
     {
         poweredOn = false;
+        fgSprite.material = poweredOffMat;
+        powerLine.material = poweredOffMat;
     }
 
     public Color GetColor()

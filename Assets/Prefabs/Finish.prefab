@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6148168177185877762}
   - component: {fileID: 7071386326313176622}
   - component: {fileID: 2419019898297749640}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Finish
   m_TagString: Finish
   m_Icon: {fileID: 0}
@@ -82,7 +82,7 @@ SpriteRenderer:
   m_Size: {x: 1, y: 1}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!61 &2419019898297749640

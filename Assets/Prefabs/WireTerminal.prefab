@@ -339,7 +339,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   poweredOn: 0
   CurrentWire: {fileID: 0}
+  isButton: 0
   termColor: {r: 0, g: 0, b: 0, a: 0}
+  poweredOnMat: {fileID: 2100000, guid: bb1625f37476d7548be595906cf05296, type: 2}
+  poweredOffMat: {fileID: 2100000, guid: 4beae069de14261458102d9f549d5830, type: 2}
 --- !u!50 &784345473503416946
 Rigidbody2D:
   serializedVersion: 4
