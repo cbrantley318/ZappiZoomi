@@ -47,6 +47,13 @@ public class PlayerScript : MonoBehaviour
 
     private Rigidbody2D movingPlatformBody;
 
+    [Header("Level Completion")]
+    [Tooltip("Episode/level id to mark completed (used by ProgressManager).")]
+    [SerializeField] int episodeToComplete = 1;
+    [Tooltip("Delay (seconds) before showing the Level Won modal (optional)")]
+    [SerializeField] float levelCompleteDelay = 0.25f;
+    bool levelCompleted = false;
+
 
     // Start is called before the first frame update
     void Start()
@@ -98,6 +105,13 @@ public class PlayerScript : MonoBehaviour
         {
             movingPlatformBody = collision.gameObject.GetComponent<Rigidbody2D>();  //update reference so we know which elevator we care about
         }
+        if (!levelCompleted && collision.CompareTag("Finish"))
+    {
+        levelCompleted = true;
+        OnLevelComplete();
+    }
+
+
     }
 
     //- END COLLISIONS ----//
@@ -300,6 +314,41 @@ public class PlayerScript : MonoBehaviour
     }
 
     //- END WIRE INTERACTION HELPERS --//
+
+    void OnLevelComplete()
+{
+    // Save progress (if you have ProgressManager)
+    // if (ProgressManager.Instance != null)
+    // {
+    //     ProgressManager.Instance.CompleteEpisode(episodeToComplete);
+    // }
+
+    // Optionally disable player movement immediately so nothing else happens
+    // You can disable this GameObject or set a flag — here we disable this script
+    this.enabled = false;
+
+    // Optionally play a sfx or animation here, then show modal after delay
+    if (levelCompleteDelay > 0f)
+        Invoke(nameof(ShowLevelWonModal), levelCompleteDelay);
+    else
+        ShowLevelWonModal();
+}
+
+void ShowLevelWonModal()
+{
+    // Prefer using your PersistentUIManager so the modal blocks input consistently
+    if (PersistentUIManager.Instance != null)
+    {
+        PersistentUIManager.Instance.ShowLevelWon();
+    }
+    else
+    {
+        // Fallback: pause the game and log
+        Time.timeScale = 0f;
+        Debug.Log("Level complete - PersistentUIManager not found.");
+    }
+}
+
 
 
 

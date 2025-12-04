@@ -116,6 +116,39 @@ public class PersistentUIManager : MonoBehaviour
         // restore time
         Time.timeScale = 1f;
     }
+    [Header("Level Won")]
+public GameObject levelWonModal;
+
+// Call to show level-won UI. You can pass optional scene names/index if needed.
+public void ShowLevelWon()
+{
+    if (screenBlocker != null) screenBlocker.SetActive(true);
+    if (levelWonModal != null) levelWonModal.SetActive(true);
+
+    GameState.IsUIOpen = true;
+    SetPlayerScriptsEnabled(false);
+    #if ENABLE_INPUT_SYSTEM
+    if (playerInput != null) playerInput.enabled = false;
+    #endif
+
+    Time.timeScale = 0f;
+}
+
+// Hide LevelWon modal (restore input/time)
+public void HideLevelWon()
+{
+    if (levelWonModal != null) levelWonModal.SetActive(false);
+    if (!IsAnyModalOpen() && screenBlocker != null) screenBlocker.SetActive(false);
+
+    SetPlayerScriptsEnabled(true);
+    #if ENABLE_INPUT_SYSTEM
+    if (playerInput != null) playerInput.enabled = true;
+    #endif
+
+    GameState.IsUIOpen = false;
+    Time.timeScale = 1f;
+}
+
 
     /// <summary>Open pause modal (blocks input and pauses the game)</summary>
     public void PauseGame()
@@ -155,6 +188,7 @@ public class PersistentUIManager : MonoBehaviour
     {
         if (welcomeScreen != null && welcomeScreen.activeSelf) return true;
         if (pauseModal != null && pauseModal.activeSelf) return true;
+        if (levelWonModal != null && levelWonModal.activeSelf) return true;
         return false;
     }
 
@@ -167,4 +201,6 @@ public class PersistentUIManager : MonoBehaviour
             if (s != null) s.enabled = enabled;
         }
     }
+
+    
 }

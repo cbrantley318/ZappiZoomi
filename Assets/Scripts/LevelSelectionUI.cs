@@ -7,6 +7,7 @@ public class LevelSelectionUI : MonoBehaviour
     [Header("Buttons")]
     public Button level1Button;
     public Button level2Button;
+    public Button level3Button;
 
     void Start()
     {
@@ -18,9 +19,12 @@ public class LevelSelectionUI : MonoBehaviour
 
         level1Button.onClick.RemoveAllListeners();
         level2Button.onClick.RemoveAllListeners();
+        level3Button.onClick.RemoveAllListeners();
+        
 
         level1Button.onClick.AddListener(() => LoadLevel("Level1"));
         level2Button.onClick.AddListener(() => LoadLevel("Level2"));
+        level3Button.onClick.AddListener(() => LoadLevel("Level3"));
     }
 
     void LoadLevel(string sceneName)
