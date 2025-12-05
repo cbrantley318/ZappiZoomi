@@ -8041,7 +8041,7 @@ PrefabInstance:
       objectReference: {fileID: 2100000, guid: 9dfc825aed78fcd4ba02077103263b40, type: 2}
     - target: {fileID: 1741511962356894908, guid: e17fa2567f55c43638c89f8c139e7c25, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2201510269971536132, guid: e17fa2567f55c43638c89f8c139e7c25, type: 3}
       propertyPath: m_LocalScale.x
@@ -8070,6 +8070,10 @@ PrefabInstance:
     - target: {fileID: 3789408763373226783, guid: e17fa2567f55c43638c89f8c139e7c25, type: 3}
       propertyPath: playerMovementScripts.Array.data[0]
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4162240171503213190, guid: e17fa2567f55c43638c89f8c139e7c25, type: 3}
+      propertyPath: m_margin.z
+      value: -1156.5316
       objectReference: {fileID: 0}
     - target: {fileID: 6245474816579093957, guid: e17fa2567f55c43638c89f8c139e7c25, type: 3}
       propertyPath: m_LocalPosition.x
@@ -8111,6 +8115,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7773882830960535735, guid: e17fa2567f55c43638c89f8c139e7c25, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8162309671527939264, guid: e17fa2567f55c43638c89f8c139e7c25, type: 3}
       propertyPath: m_Name
       value: PersistentUI
@@ -8122,6 +8130,22 @@ PrefabInstance:
     - target: {fileID: 8781227520388203022, guid: e17fa2567f55c43638c89f8c139e7c25, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8883818718668780277, guid: e17fa2567f55c43638c89f8c139e7c25, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 287.424
+      objectReference: {fileID: 0}
+    - target: {fileID: 8883818718668780277, guid: e17fa2567f55c43638c89f8c139e7c25, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 302.7753
+      objectReference: {fileID: 0}
+    - target: {fileID: 8883818718668780277, guid: e17fa2567f55c43638c89f8c139e7c25, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 31
+      objectReference: {fileID: 0}
+    - target: {fileID: 8883818718668780277, guid: e17fa2567f55c43638c89f8c139e7c25, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 77
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
