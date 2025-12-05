@@ -44,6 +44,7 @@ public class PlayerScript : MonoBehaviour
     private float jumpTime = 0;
 
     private Animator myAnimator;
+    private SpriteRenderer mySpriteRenderer; 
 
 
     //wire management
@@ -78,6 +79,7 @@ public class PlayerScript : MonoBehaviour
         MyFeetHitbox = PlayerFeet.GetComponent<BoxCollider2D>();
         
         myAnimator = GetComponent<Animator>();
+        mySpriteRenderer = GetComponent<SpriteRenderer>();
 
         if (elevatorAudio != null)
         {
@@ -195,6 +197,18 @@ public class PlayerScript : MonoBehaviour
         {
             MyRigidBody.AddForce(accel * Vector2.right, ForceMode2D.Force);
         }
+        
+        // Flip player sprite based on direction
+        if (Input.GetKey(KeyCode.RightArrow))
+        {
+            mySpriteRenderer.flipX = false;   // face right
+        }
+        else if (Input.GetKey(KeyCode.LeftArrow))
+        {
+            mySpriteRenderer.flipX = true;    // face left
+        }
+
+        
         RescaleXSpeed();    //I cant drive (5)5
           
         if (Input.GetKeyDown(KeyCode.Space) && (Time.time - jumpTime) > jumpTimeout)    //jump
