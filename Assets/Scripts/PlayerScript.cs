@@ -53,6 +53,8 @@ public class PlayerScript : MonoBehaviour
 
     private Rigidbody2D movingPlatformBody;
 
+
+    //level stuff
     [Header("Level Completion")]
     [Tooltip("Episode/level id to mark completed (used by ProgressManager).")]
     [SerializeField] int episodeToComplete = 1;
@@ -63,6 +65,8 @@ public class PlayerScript : MonoBehaviour
     [Header("Audio")]
     [SerializeField] private AudioSource elevatorAudio;
     private ElevatorPlatform currentElevator;
+    [SerializeField] AudioSource jumpAudioSource;
+    [SerializeField] AudioSource walkAudioSource;      //todo: maybe add this
 
     // Start is called before the first frame update
     void Start()
@@ -75,6 +79,12 @@ public class PlayerScript : MonoBehaviour
             elevatorAudio.playOnAwake = false;
             elevatorAudio.Stop();
         }
+
+        if (jumpAudioSource == null)
+        {
+            Debug.LogWarning("Uh Oh! Someone forgot to click assign in the prefab - PlayerScript:Start() - Jump Audio Source not assigned");
+        }
+
     }
 
     // Update is called once per frame
@@ -177,16 +187,13 @@ public class PlayerScript : MonoBehaviour
         {
             MyRigidBody.AddForce(accel * Vector2.right, ForceMode2D.Force);
         }
-
-        RescaleXSpeed();
+        RescaleXSpeed();    //I cant drive (5)5
           
-
-        //Jumping
         if (Input.GetKeyDown(KeyCode.Space) && (Time.time - jumpTime) > jumpTimeout)    //jump
         {
-            //play jump sound here
             if (MyFeetHitbox.IsTouchingLayers(GroundLayers) || MyFeetHitbox.IsTouchingLayers(MovingPlatform))
             {
+                jumpAudioSource.Play();
                 MyRigidBody.velocity = MyRigidBody.velocity + new Vector2(0, jumpVelocity);
             }
         }

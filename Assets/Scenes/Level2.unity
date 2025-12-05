@@ -21904,7 +21904,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7650936524496908285, guid: a5dabc6357a932e42a0be03a369a4ca4, type: 3}
       propertyPath: speed
-      value: 3
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7650936524496908285, guid: a5dabc6357a932e42a0be03a369a4ca4, type: 3}
+      propertyPath: pauseInterval
+      value: 0.75
       objectReference: {fileID: 0}
     - target: {fileID: 7830121005852402246, guid: a5dabc6357a932e42a0be03a369a4ca4, type: 3}
       propertyPath: m_TagString
