@@ -19,6 +19,7 @@ public class PersistentUIManager : MonoBehaviour
     public GameObject welcomeScreen;
     public GameObject screenBlocker;
     public GameObject pauseModal;
+    public GameObject gameOverModal;
 
     [Header("Player input to disable")]
     [Tooltip("Drag movement, camera, shooting scripts here (any MonoBehaviour that reads input).")]
@@ -31,6 +32,14 @@ public class PersistentUIManager : MonoBehaviour
 
     [Tooltip("If true, welcome will show automatically at Start via ShowWelcome()")]
     public bool showWelcomeOnStart = true;
+
+    [Header("Game Over / Death (UI only)")]
+    public AudioSource deathAudioSource;
+    [Tooltip("Optional particle system to trigger on death (optional).")]
+    public ParticleSystem deathParticle;
+    [Tooltip("How long (seconds, unscaled) to wait before hiding the panel. If <= 0 and deathAudioSource.clip exists, the clip length will be used.")]
+    public float gameOverDisplayDelay = 0f; // 0 = use audio clip length when available
+
 
     void Awake()
     {
@@ -51,6 +60,7 @@ public class PersistentUIManager : MonoBehaviour
         if (welcomeScreen != null) welcomeScreen.SetActive(false);
         if (pauseModal != null) pauseModal.SetActive(false);
         if (screenBlocker != null) screenBlocker.SetActive(false);
+        if (gameOverModal != null) gameOverModal.SetActive(false);
         GameState.IsUIOpen = false;
     }
 
@@ -80,6 +90,73 @@ public class PersistentUIManager : MonoBehaviour
     // -------------------------
     // Public helpers (use these)
     // -------------------------
+
+
+    /// <summary>
+    /// Show the Game Over panel, play audio/particle, then hide and restore input.
+    /// This does NOT restart or reload any scene.
+    /// </summary>
+    public void ShowGameOverPanel()
+    {
+        // show modal and block input
+        if (screenBlocker != null) screenBlocker.SetActive(true);
+        if (gameOverModal != null) gameOverModal.SetActive(true);
+
+        GameState.IsUIOpen = true;
+        SetPlayerScriptsEnabled(false);
+        #if ENABLE_INPUT_SYSTEM
+        if (playerInput != null) playerInput.enabled = false;
+        #endif
+
+        // Ensure normal time so audio plays at expected speed
+        Time.timeScale = 1f;
+
+        // Play particle if assigned
+        if (deathParticle != null)
+            deathParticle.Play();
+
+        // Play audio if available
+        float wait = gameOverDisplayDelay;
+        if (deathAudioSource != null && deathAudioSource.clip != null)
+        {
+            deathAudioSource.Play();
+            if (gameOverDisplayDelay <= 0f)
+                wait = deathAudioSource.clip.length;
+        }
+
+        // if nothing set, use a small default so player sees the panel
+        if (wait <= 0f) wait = 0.8f;
+
+        StartCoroutine(HideGameOverPanelAfterDelayUnscaled(wait));
+    }
+
+    /// <summary>
+    /// Hides the Game Over panel after waiting (unscaled time), and restores input/time.
+    /// </summary>
+    IEnumerator HideGameOverPanelAfterDelayUnscaled(float delayUnscaled)
+    {
+        float t = 0f;
+        while (t < delayUnscaled)
+        {
+            t += Time.unscaledDeltaTime;
+            yield return null;
+        }
+
+        // hide UI
+        if (gameOverModal != null) gameOverModal.SetActive(false);
+        if (!IsAnyModalOpen() && screenBlocker != null) screenBlocker.SetActive(false);
+
+        // stop particle if desired (optional)
+        if (deathParticle != null) deathParticle.Stop();
+
+        // restore inputs
+        SetPlayerScriptsEnabled(true);
+        #if ENABLE_INPUT_SYSTEM
+        if (playerInput != null) playerInput.enabled = true;
+        #endif
+
+        GameState.IsUIOpen = false;
+    }
 
     /// <summary>Show the welcome modal (blocks input and pauses the game)</summary>
     public void ShowWelcome()
@@ -189,6 +266,7 @@ public void HideLevelWon()
         if (welcomeScreen != null && welcomeScreen.activeSelf) return true;
         if (pauseModal != null && pauseModal.activeSelf) return true;
         if (levelWonModal != null && levelWonModal.activeSelf) return true;
+        if (gameOverModal != null && gameOverModal.activeSelf) return true;
         return false;
     }
 

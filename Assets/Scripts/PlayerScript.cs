@@ -60,7 +60,7 @@ public class PlayerScript : MonoBehaviour
     [SerializeField] float levelCompleteDelay = 0.25f;
     bool levelCompleted = false;
 
-    // audio 
+    [Header("Audio")]
     [SerializeField] private AudioSource elevatorAudio;
     private ElevatorPlatform currentElevator;
 
@@ -272,9 +272,11 @@ public class PlayerScript : MonoBehaviour
     //-------- PLAYER STATE ----------------------//
     void KillPlayer()
     {   
-        //TODO: add in a death animation or something to hide the latency (maybe just a UI popup yeah that's easy).
+        PersistentUIManager.Instance.ShowGameOverPanel();
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
+
+
     //- END PLAYER STATE -----//
 
     //--------- WIRE INTERACTION HELPERS --------//

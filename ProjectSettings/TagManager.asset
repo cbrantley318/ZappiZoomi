@@ -8,6 +8,7 @@ TagManager:
   - WireSource
   - LightningBolt
   - TempLight
+  - Elevator
   layers:
   - Default
   - TransparentFX
