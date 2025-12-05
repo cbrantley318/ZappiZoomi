@@ -43,6 +43,9 @@ public class PlayerScript : MonoBehaviour
     private float jumpTimeout = 0.5f;   //only let them jump once every 0.5s
     private float jumpTime = 0;
 
+    private Animator myAnimator;
+
+
     //wire management
     private bool isCarryingWire = false;
     private Vector3 holdWirePosition = new Vector3(0.2f, 0.0f, 0);
