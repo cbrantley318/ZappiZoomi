@@ -15,7 +15,19 @@ public class CameraScript : MonoBehaviour
     public float minY;
     public float maxY;
 
-  
+    private float targetZoomVal = 10;
+    private Camera cam;
+    [SerializeField] float zoomSpeed;
+
+    private void Start()
+    {
+        cam = GetComponent<Camera>();
+        if ((zoomSpeed != zoomSpeed) || zoomSpeed == 0)
+        {
+            zoomSpeed = 1;
+        }
+    }
+
 
     void LateUpdate()
     {
@@ -42,6 +54,39 @@ public class CameraScript : MonoBehaviour
         }
 
 
+        cam.orthographicSize = Mathf.Lerp(cam.orthographicSize, targetZoomVal, Time.deltaTime * zoomSpeed);
+
+
+
+
+    }
+
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.X))
+        {
+            ZoomOut();
+        }
+        if (Input.GetKeyUp(KeyCode.X))
+        {
+            ZoomIn();
+        }
+    }
+
+    public void ZoomIn()
+    {
+        targetZoomVal = 10;
+    }
+
+    public void ZoomOut()
+    {
+        targetZoomVal = 20;
+    }
+
+    public void ZoomTo(int Size)
+    {
+        targetZoomVal = Size;
     }
 
     // // Start is called before the first frame update

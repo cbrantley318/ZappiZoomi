@@ -294,7 +294,11 @@ public class PlayerScript : MonoBehaviour
 
     void UpdateAnimator()
     {
-        if (myAnimator == null) return;
+        if (myAnimator == null)
+        {
+            //Debug.LogWarning("Uh oh! Someone didn't assign an animator in the Inspector!"); //lol whoops guess this isn't needed
+            return;
+        }
 
         // Horizontal speed
         float speed = Mathf.Abs(MyRigidBody.velocity.x);

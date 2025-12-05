@@ -97,7 +97,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &4462550440406473196
 RectTransform:
   m_ObjectHideFlags: 0
@@ -332,9 +332,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 'You died!
-
-    Continue?'
+  m_Text: You died!
 --- !u!1 &1984898007838276430
 GameObject:
   m_ObjectHideFlags: 0
@@ -2659,8 +2657,8 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Controls:\n\nLeft/Right Arrow Keys\t\t\t\tMove\nSpace Bar\t\t\t\t\t\tJump\nZ\t\t\t\t\t\t\tGrab
-    / Place Wires"
+  m_text: "Controls:\n\nLeft/Right Arrow Keys\t\t\t\tMove\nSpace Bar\t\t\t\t\t\tJump\nPress
+    Z\t\t\t\t\t\tGrab / Place Wires\nHold X\t\t\t\t\t\tZoom Out Camera"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -2745,7 +2743,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1761251497535658501
 RectTransform:
   m_ObjectHideFlags: 0
