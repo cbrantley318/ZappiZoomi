@@ -39,6 +39,7 @@ public class PlayerScript : MonoBehaviour
     //things local to the player object
     private BoxCollider2D MyFeetHitbox;
     private Rigidbody2D MyRigidBody;
+    private GameObject HaloLight;
 
     private float jumpTimeout = 0.5f;   //only let them jump once every 0.5s
     private float jumpTime = 0;
@@ -77,7 +78,15 @@ public class PlayerScript : MonoBehaviour
     {
         MyRigidBody = GetComponent<Rigidbody2D>();
         MyFeetHitbox = PlayerFeet.GetComponent<BoxCollider2D>();
-        
+
+        foreach (Transform childTransform in transform)
+        {
+            if (childTransform.CompareTag("Halo"))
+            {
+                HaloLight = childTransform.gameObject;
+            }
+        }
+
         myAnimator = GetComponent<Animator>();
         mySpriteRenderer = GetComponent<SpriteRenderer>();
 
@@ -105,6 +114,7 @@ public class PlayerScript : MonoBehaviour
         CheckPlayerInput();         //for moving and jumping and (eventually) grabbing wires and placing them and probably a pause screen as well
 
         UpdateAnimator();
+        HandleHaloDirection();
 
     }
 
@@ -192,23 +202,16 @@ public class PlayerScript : MonoBehaviour
         if (Input.GetKey(KeyCode.LeftArrow))    //move left (no acceleration yet, just barebones for debugging until Hanchi pushes his code)
         {
             MyRigidBody.AddForce(accel * Vector2.left, ForceMode2D.Force);
+            mySpriteRenderer.flipX = true;    // face left
         }
         if (Input.GetKey(KeyCode.RightArrow))   //move right
         {
             MyRigidBody.AddForce(accel * Vector2.right, ForceMode2D.Force);
-        }
-        
-        // Flip player sprite based on direction
-        if (Input.GetKey(KeyCode.RightArrow))
-        {
             mySpriteRenderer.flipX = false;   // face right
         }
-        else if (Input.GetKey(KeyCode.LeftArrow))
-        {
-            mySpriteRenderer.flipX = true;    // face left
-        }
 
-        
+
+
         RescaleXSpeed();    //I cant drive (5)5
           
         if (Input.GetKeyDown(KeyCode.Space) && (Time.time - jumpTime) > jumpTimeout)    //jump
@@ -244,6 +247,15 @@ public class PlayerScript : MonoBehaviour
 
 
 
+    }
+
+    private void HandleHaloDirection()
+    {
+        //this really should be in a different spot in the code now lmaooo
+        if (mySpriteRenderer.flipX)
+            HaloLight.transform.localScale = new Vector3(1, 1, 1);
+        else
+            HaloLight.transform.localScale = new Vector3(-1, 1, 1);
     }
 
 
