@@ -5158,6 +5158,46 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1334002349924685903, guid: e17fa2567f55c43638c89f8c139e7c25, type: 3}
+      propertyPath: m_SortingLayer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 1334002349924685903, guid: e17fa2567f55c43638c89f8c139e7c25, type: 3}
+      propertyPath: m_SortingLayerID
+      value: 1182983495
+      objectReference: {fileID: 0}
+    - target: {fileID: 1334002349924685903, guid: e17fa2567f55c43638c89f8c139e7c25, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 9dfc825aed78fcd4ba02077103263b40, type: 2}
+    - target: {fileID: 1741511962356894908, guid: e17fa2567f55c43638c89f8c139e7c25, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2201510269971536132, guid: e17fa2567f55c43638c89f8c139e7c25, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 200
+      objectReference: {fileID: 0}
+    - target: {fileID: 2201510269971536132, guid: e17fa2567f55c43638c89f8c139e7c25, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 200
+      objectReference: {fileID: 0}
+    - target: {fileID: 2201510269971536132, guid: e17fa2567f55c43638c89f8c139e7c25, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2201510269971536132, guid: e17fa2567f55c43638c89f8c139e7c25, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2201510269971536132, guid: e17fa2567f55c43638c89f8c139e7c25, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2718681661046207919, guid: e17fa2567f55c43638c89f8c139e7c25, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 3789408763373226783, guid: e17fa2567f55c43638c89f8c139e7c25, type: 3}
       propertyPath: playerMovementScripts.Array.data[0]
       value: 
@@ -5207,7 +5247,8 @@ PrefabInstance:
       value: PersistentUI
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 2611777035595376451, guid: e17fa2567f55c43638c89f8c139e7c25, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e17fa2567f55c43638c89f8c139e7c25, type: 3}
