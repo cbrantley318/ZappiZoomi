@@ -103,11 +103,6 @@ public class PlayerScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
-    }
-
-    private void FixedUpdate()
-    {
         HandleWires();
 
         CheckDynamicCollisions();   //for now this is just if we're touching elevators
@@ -116,6 +111,11 @@ public class PlayerScript : MonoBehaviour
 
         UpdateAnimator();
         HandleHaloDirection();
+    }
+
+    private void FixedUpdate()
+    {
+        FixedCheckPlayerInput();    //ugh
         
     }
 
@@ -194,7 +194,7 @@ public class PlayerScript : MonoBehaviour
 
 
     //--------- CONTROL INPUT HELPERS and motion/physics-----------//
-    void CheckPlayerInput()
+    void FixedCheckPlayerInput()
     {
         /*-----MOTION---------*/
 
@@ -211,8 +211,13 @@ public class PlayerScript : MonoBehaviour
             mySpriteRenderer.flipX = false;   // face right
         }
         RescaleXSpeed();    //I cant drive (5)5
+    }
+
+
+    void CheckPlayerInput()
+    {
           
-        if (Input.GetKey(KeyCode.Space) && (Time.time - jumpTime) > jumpTimeout)    //jump      //ahhh, the joys of polling at 50Hz. All for some consistent physics
+        if (Input.GetKeyDown(KeyCode.Space) && (Time.time - jumpTime) > jumpTimeout)    //jump      //ahhh, the joys of polling at 50Hz. All for some consistent physics
         {
             if (MyFeetHitbox.IsTouchingLayers(GroundLayers) || MyFeetHitbox.IsTouchingLayers(MovingPlatform))
             {
@@ -223,7 +228,7 @@ public class PlayerScript : MonoBehaviour
         }
         
         /*-----Grabbing Things---------*/
-        if (Input.GetKey(KeyCode.Z))    //grab wire if not holding one already
+        if (Input.GetKeyDown(KeyCode.Z))    //grab wire if not holding one already
         {
             if (GetComponent<BoxCollider2D>().IsTouchingLayers(WireTerminalLayer))  //if it's touching one of these layers, we have two options (see below)
             {
