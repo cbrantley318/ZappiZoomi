@@ -318,7 +318,7 @@ public class PlayerScript : MonoBehaviour
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
-    void UpdateAnimator()
+    void UpdateAnimator() //test
     {
         if (myAnimator == null)
         {
