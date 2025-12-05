@@ -62,6 +62,7 @@ public class PlayerScript : MonoBehaviour
 
     // audio 
     [SerializeField] private AudioSource elevatorAudio;
+    private ElevatorPlatform currentElevator;
 
     // Start is called before the first frame update
     void Start()
@@ -120,10 +121,22 @@ public class PlayerScript : MonoBehaviour
             movingPlatformBody = collision.gameObject.GetComponent<Rigidbody2D>();  //update reference so we know which elevator we care about
             if (collision.CompareTag("Elevator"))
                 {
-                    // Only play elevator audio when NO UI is open
-                    if (!GameState.IsUIOpen && elevatorAudio != null && !elevatorAudio.isPlaying)
+                    ElevatorPlatform elevator = collision.GetComponent<ElevatorPlatform>();
+                    if (elevator == null)
                     {
-                        elevatorAudio.Play();
+                        // If ElevatorPlatform script is on the parent instead:
+                        elevator = collision.GetComponentInParent<ElevatorPlatform>();
+                    }
+
+                    // If still null, this isn't a real elevator platform
+                    if (elevator == null)
+                        return;
+
+                    // Check if elevator is powered on
+                    if (elevator.poweredOn && !GameState.IsUIOpen)
+                    {
+                        if (elevatorAudio != null && !elevatorAudio.isPlaying)
+                            elevatorAudio.Play();
                     }
                 }
         }
@@ -138,12 +151,10 @@ public class PlayerScript : MonoBehaviour
         {
             movingPlatformBody = null;
             if (collision.CompareTag("Elevator"))
-            {
-                if (elevatorAudio != null && elevatorAudio.isPlaying)
                 {
-                    elevatorAudio.Stop();
+                    if (elevatorAudio != null && elevatorAudio.isPlaying)
+                        elevatorAudio.Stop();
                 }
-            }
         }
     }
 
