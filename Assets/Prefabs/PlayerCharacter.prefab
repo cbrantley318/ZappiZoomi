@@ -496,8 +496,8 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 4096
   jumpVelocity: 12
-  moveVelocity: 5
-  moveAccel: 5
+  moveVelocity: 30
+  moveAccel: 10
   airLoss: 0.2
   ActiveWireSpawner: {fileID: 0}
   ActiveWireTerminal: {fileID: 0}

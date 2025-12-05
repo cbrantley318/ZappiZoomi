@@ -223,7 +223,7 @@ public class PlayerScript : MonoBehaviour
         }
         
         /*-----Grabbing Things---------*/
-        if (Input.GetKeyDown(KeyCode.Z))    //grab wire if not holding one already
+        if (Input.GetKey(KeyCode.Z))    //grab wire if not holding one already
         {
             if (GetComponent<BoxCollider2D>().IsTouchingLayers(WireTerminalLayer))  //if it's touching one of these layers, we have two options (see below)
             {
