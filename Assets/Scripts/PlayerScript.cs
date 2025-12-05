@@ -184,7 +184,7 @@ public class PlayerScript : MonoBehaviour
         //Jumping
         if (Input.GetKeyDown(KeyCode.Space) && (Time.time - jumpTime) > jumpTimeout)    //jump
         {
-
+            //play jump sound here
             if (MyFeetHitbox.IsTouchingLayers(GroundLayers) || MyFeetHitbox.IsTouchingLayers(MovingPlatform))
             {
                 MyRigidBody.velocity = MyRigidBody.velocity + new Vector2(0, jumpVelocity);
@@ -272,6 +272,7 @@ public class PlayerScript : MonoBehaviour
     //-------- PLAYER STATE ----------------------//
     void KillPlayer()
     {   
+        //TODO: maybe a death animation - I'm thinking have him "pop"/"explode" from spikes, or eyes bug out and yellow electricity if water
         PersistentUIManager.Instance.ShowGameOverPanel();
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
@@ -306,10 +307,6 @@ public class PlayerScript : MonoBehaviour
         PickUpWire(CurrentWire);
 
         WireSpawner.GetComponent<PlugScript>().RemoveCurColor();
-
-
-        //now, tell the spawner we picked it up
-
 
     }
 
