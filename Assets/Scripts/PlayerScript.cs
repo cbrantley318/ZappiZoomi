@@ -331,7 +331,7 @@ public class PlayerScript : MonoBehaviour
         }
 
         // Horizontal speed
-        float speed = Mathf.Abs(MyRigidBody.velocity.x);
+        float speed = Mathf.Abs((transform.parent == null) ? MyRigidBody.velocity.x : MyRigidBody.velocity.x - transform.parent.GetComponent<Rigidbody2D>().velocity.x);
 
         // Are we on the ground
         bool isGrounded = MyFeetHitbox.IsTouchingLayers(GroundLayers)

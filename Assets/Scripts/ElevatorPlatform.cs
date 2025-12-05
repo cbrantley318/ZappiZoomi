@@ -66,7 +66,7 @@ public class ElevatorPlatform : MonoBehaviour
         goingUp = true;
     }
 
-    void Update()
+    void FixedUpdate()
     {
         poweredOn = parentObj.GetComponentInChildren<PowerTermScript>().poweredOn;  //there can be only one (PowerTermScript, that is)
 
