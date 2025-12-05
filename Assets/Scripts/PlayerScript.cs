@@ -322,7 +322,8 @@ public class PlayerScript : MonoBehaviour
                         || MyFeetHitbox.IsTouchingLayers(MovingPlatform);
 
         // Vertical speed (for jump up vs down)
-        float verticalSpeed = MyRigidBody.velocity.y;
+        //float verticalSpeed = MyRigidBody.velocity.y;
+        float verticalSpeed = (transform.parent == null) ? MyRigidBody.velocity.y : MyRigidBody.velocity.y - transform.parent.GetComponent<Rigidbody2D>().velocity.y;
 
         myAnimator.SetFloat("Speed", speed);
         myAnimator.SetBool("IsGrounded", isGrounded);
