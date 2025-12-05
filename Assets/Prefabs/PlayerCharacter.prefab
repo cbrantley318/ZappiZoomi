@@ -26,7 +26,7 @@ Transform:
   m_GameObject: {fileID: 2157101116413276601}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.056424163, y: 0.042786352, z: 0.0010271459}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -66,8 +66,8 @@ MonoBehaviour:
   m_ShadowVolumeIntensityEnabled: 0
   m_ShadowVolumeIntensity: 0.75
   m_LocalBounds:
-    m_Center: {x: -0.04495001, y: -0.024549961, z: 0}
-    m_Extent: {x: 1.08205, y: 1.15905, z: 0}
+    m_Center: {x: 0.000050008297, y: 0.003099978, z: 0}
+    m_Extent: {x: 1.08095, y: 1.1647999, z: 0}
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 1
@@ -78,18 +78,18 @@ MonoBehaviour:
   m_ShapeLightFalloffSize: 0.5
   m_ShapeLightFalloffOffset: {x: 0, y: 0}
   m_ShapePath:
-  - {x: -0.6183193, y: -0.07259056, z: 0}
-  - {x: -0.5261154, y: -0.1846551, z: 0}
-  - {x: -0.49868327, y: -0.46465907, z: 0}
-  - {x: -0.4504434, y: -0.680818, z: 0}
-  - {x: 0.30356386, y: -0.6843606, z: 0}
-  - {x: 0.40598494, y: -0.51005757, z: 0}
-  - {x: 0.41150144, y: -0.20714045, z: 0}
-  - {x: 0.53138256, y: -0.07580994, z: -0.000000038649887}
-  - {x: 0.53697526, y: 0.42753837, z: 0}
-  - {x: 0.3078755, y: 0.62684053, z: 0}
-  - {x: -0.43672365, y: 0.6345186, z: 0}
-  - {x: -0.6262461, y: 0.449202, z: 0}
+  - {x: -0.5679018, y: -0.033133257, z: 0}
+  - {x: -0.4778899, y: -0.14519808, z: 0}
+  - {x: -0.4701864, y: -0.41862568, z: 0}
+  - {x: -0.38906556, y: -0.65889734, z: 0}
+  - {x: 0.3211005, y: -0.66244, z: 0}
+  - {x: 0.44105798, y: -0.457448, z: 0}
+  - {x: 0.45753476, y: -0.17206739, z: 0}
+  - {x: 0.57741594, y: -0.042928975, z: -0.000000038649887}
+  - {x: 0.5808166, y: 0.47137964, z: 0}
+  - {x: 0.393366, y: 0.6684897, z: 0}
+  - {x: -0.36000168, y: 0.6652076, z: 0}
+  - {x: -0.5802127, y: 0.47550678, z: 0}
 --- !u!1 &2865572486765596688
 GameObject:
   m_ObjectHideFlags: 0

@@ -35,7 +35,7 @@ RenderSettings:
   m_DefaultReflectionMode: 0
   m_DefaultReflectionResolution: 128
   m_ReflectionBounces: 1
-  m_ReflectionIntensity: 1
+  m_ReflectionIntensity: 0
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
   m_UseRadianceAmbientProbe: 0
@@ -97,7 +97,7 @@ LightmapSettings:
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
   m_LightingDataAsset: {fileID: 0}
-  m_LightingSettings: {fileID: 0}
+  m_LightingSettings: {fileID: 4890085278179872738, guid: dcf58b27b410335408f345485aa18363, type: 2}
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -107625,14 +107625,6 @@ PrefabInstance:
     - target: {fileID: 263701130901704193, guid: e6c9250690da49b47a8756d8a77a6b1e, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2943991088932693397, guid: e6c9250690da49b47a8756d8a77a6b1e, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3730777138578999899, guid: e6c9250690da49b47a8756d8a77a6b1e, type: 3}
-      propertyPath: m_Intensity
-      value: 0.01
       objectReference: {fileID: 0}
     - target: {fileID: 8160292626796026948, guid: e6c9250690da49b47a8756d8a77a6b1e, type: 3}
       propertyPath: m_Name
