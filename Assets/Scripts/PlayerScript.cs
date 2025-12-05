@@ -68,6 +68,7 @@ public class PlayerScript : MonoBehaviour
     private ElevatorPlatform currentElevator;
     [SerializeField] AudioSource jumpAudioSource;
     [SerializeField] AudioSource walkAudioSource;      //todo: maybe add this
+    [SerializeField] AudioSource zapAudioSource;      //todo: maybe add this
 
     // Start is called before the first frame update
     void Start()
@@ -297,6 +298,8 @@ public class PlayerScript : MonoBehaviour
 
         if (isCarryingWire && MyHitbox.IsTouchingLayers(ElectrocutionLayer))
         {
+            //AudioSource.PlayClipAtPoint(zapAudioSource.clip, transform.position); //lol nvm, there's the little guitar jingle
+            //zapAudioSource.Play();
             KillPlayer();
         }
 

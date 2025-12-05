@@ -10,6 +10,7 @@ TagManager:
   - TempLight
   - Elevator
   - Halo
+  - ZapSound
   layers:
   - Default
   - TransparentFX
