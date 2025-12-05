@@ -60,12 +60,20 @@ public class PlayerScript : MonoBehaviour
     [SerializeField] float levelCompleteDelay = 0.25f;
     bool levelCompleted = false;
 
+    // audio 
+    [SerializeField] private AudioSource elevatorAudio;
 
     // Start is called before the first frame update
     void Start()
     {
         MyRigidBody = GetComponent<Rigidbody2D>();
         MyFeetHitbox = PlayerFeet.GetComponent<BoxCollider2D>();
+        if (elevatorAudio != null)
+        {
+            elevatorAudio.loop = true;    // loop while standing on elevator
+            elevatorAudio.playOnAwake = false;
+            elevatorAudio.Stop();
+        }
     }
 
     // Update is called once per frame
@@ -110,9 +118,35 @@ public class PlayerScript : MonoBehaviour
         if (((1 << collision.gameObject.layer) & MovingPlatform) != 0)
         {
             movingPlatformBody = collision.gameObject.GetComponent<Rigidbody2D>();  //update reference so we know which elevator we care about
+            if (collision.CompareTag("Elevator"))
+                {
+                    // Only play elevator audio when NO UI is open
+                    if (!GameState.IsUIOpen && elevatorAudio != null && !elevatorAudio.isPlaying)
+                    {
+                        elevatorAudio.Play();
+                    }
+                }
         }
 
+        
+
     }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (((1 << collision.gameObject.layer) & MovingPlatform) != 0)
+        {
+            movingPlatformBody = null;
+            if (collision.CompareTag("Elevator"))
+            {
+                if (elevatorAudio != null && elevatorAudio.isPlaying)
+                {
+                    elevatorAudio.Stop();
+                }
+            }
+        }
+    }
+
 
     //- END COLLISIONS ----//
 

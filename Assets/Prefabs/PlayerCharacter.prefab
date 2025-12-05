@@ -281,6 +281,7 @@ MonoBehaviour:
   ActiveWireTerminal: {fileID: 0}
   episodeToComplete: 1
   levelCompleteDelay: 0.25
+  elevatorAudio: {fileID: 0}
 --- !u!114 &3133655092167738113
 MonoBehaviour:
   m_ObjectHideFlags: 0
