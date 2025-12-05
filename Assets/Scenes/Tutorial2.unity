@@ -138189,30 +138189,6 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: -3.33
       objectReference: {fileID: 0}
-    - target: {fileID: 5574229027943806101, guid: 905da035d46f7460db49b0c51a74c1d3, type: 3}
-      propertyPath: m_Color.b
-      value: 0.26529017
-      objectReference: {fileID: 0}
-    - target: {fileID: 5574229027943806101, guid: 905da035d46f7460db49b0c51a74c1d3, type: 3}
-      propertyPath: m_Color.g
-      value: 0.67206836
-      objectReference: {fileID: 0}
-    - target: {fileID: 5574229027943806101, guid: 905da035d46f7460db49b0c51a74c1d3, type: 3}
-      propertyPath: m_Color.r
-      value: 0.8679245
-      objectReference: {fileID: 0}
-    - target: {fileID: 5574229027943806101, guid: 905da035d46f7460db49b0c51a74c1d3, type: 3}
-      propertyPath: m_FalloffIntensity
-      value: 0.567
-      objectReference: {fileID: 0}
-    - target: {fileID: 5574229027943806101, guid: 905da035d46f7460db49b0c51a74c1d3, type: 3}
-      propertyPath: m_PointLightInnerRadius
-      value: 5.3
-      objectReference: {fileID: 0}
-    - target: {fileID: 5574229027943806101, guid: 905da035d46f7460db49b0c51a74c1d3, type: 3}
-      propertyPath: m_PointLightOuterRadius
-      value: 46.1
-      objectReference: {fileID: 0}
     - target: {fileID: 6148168177185877762, guid: 905da035d46f7460db49b0c51a74c1d3, type: 3}
       propertyPath: m_LocalScale.x
       value: -1
