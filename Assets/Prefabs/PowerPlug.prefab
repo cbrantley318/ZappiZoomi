@@ -335,3 +335,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   availableColors: []
+  poweredOnMat: {fileID: 2100000, guid: 9dfc825aed78fcd4ba02077103263b40, type: 2}
+  poweredOffMat: {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}

@@ -8,6 +8,8 @@ public class PlugScript : MonoBehaviour
 {
 
     [SerializeField] List<Color> availableColors;
+    [SerializeField] Material poweredOnMat;     //for fun lighting effects
+    [SerializeField] Material poweredOffMat;
 
     private int numColors = 0;
     private List<bool> freeColors;  //when player grabs this, we mark the color as no longer free or something
@@ -78,6 +80,7 @@ public class PlugScript : MonoBehaviour
     {
         ActiveColor = c;
         PowerSymbol.color = ActiveColor;    //set the color aesthetically
+        PowerSymbol.material = (ActiveColor != Color.grey) ? poweredOnMat : poweredOffMat;
     }
 
     public bool IsColorAvailable()
@@ -92,13 +95,10 @@ public class PlugScript : MonoBehaviour
 
     public void RemoveCurColor()
     {
-        if (ActiveColorIndex < numColors-1)
+        if (ActiveColorIndex < numColors)
         {
             ActiveColorIndex++;
-            SetActiveColor(availableColors[ActiveColorIndex]);
-        } else
-        {
-            SetActiveColor(Color.grey);
+            SetActiveColor((ActiveColorIndex == numColors) ? Color.grey: availableColors[ActiveColorIndex]);
         }
 
     }
