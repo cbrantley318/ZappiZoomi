@@ -1,7 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.Assertions;
 using UnityEngine.SceneManagement;
@@ -107,6 +103,11 @@ public class PlayerScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
+    }
+
+    private void FixedUpdate()
+    {
         HandleWires();
 
         CheckDynamicCollisions();   //for now this is just if we're touching elevators
@@ -115,7 +116,7 @@ public class PlayerScript : MonoBehaviour
 
         UpdateAnimator();
         HandleHaloDirection();
-
+        
     }
 
     private void OnCollisionEnter2D(Collision2D collision)
@@ -199,27 +200,25 @@ public class PlayerScript : MonoBehaviour
 
         float accel = (MyFeetHitbox.IsTouchingLayers(GroundLayers)) ? moveAccel : airLoss * moveAccel;
 
-        if (Input.GetKey(KeyCode.LeftArrow))    //move left (no acceleration yet, just barebones for debugging until Hanchi pushes his code)
+        if (Input.GetKey(KeyCode.LeftArrow))    //move left (no acceleration yet, just barebones for debugging until Hanchi pushes his code) -- lol that never happened
         {
             MyRigidBody.AddForce(accel * Vector2.left, ForceMode2D.Force);
             mySpriteRenderer.flipX = true;    // face left
         }
         if (Input.GetKey(KeyCode.RightArrow))   //move right
         {
-            MyRigidBody.AddForce(accel * Vector2.right, ForceMode2D.Force);
+            MyRigidBody.AddForce(accel * Vector2.right, ForceMode2D.Force); //whoops, before we were adding force every frame instead of in a consistent manner lol
             mySpriteRenderer.flipX = false;   // face right
         }
-
-
-
         RescaleXSpeed();    //I cant drive (5)5
           
-        if (Input.GetKeyDown(KeyCode.Space) && (Time.time - jumpTime) > jumpTimeout)    //jump
+        if (Input.GetKey(KeyCode.Space) && (Time.time - jumpTime) > jumpTimeout)    //jump      //ahhh, the joys of polling at 50Hz. All for some consistent physics
         {
             if (MyFeetHitbox.IsTouchingLayers(GroundLayers) || MyFeetHitbox.IsTouchingLayers(MovingPlatform))
             {
                 jumpAudioSource.Play();
                 MyRigidBody.velocity = MyRigidBody.velocity + new Vector2(0, jumpVelocity);
+                jumpTime = Time.time;
             }
         }
         
