@@ -36,6 +36,7 @@ public class LevelWonUI : MonoBehaviour
     {
         Time.timeScale = 1f;
         if (PersistentUIManager.Instance != null)
+            Debug.Log("Moving on to next level");
             PersistentUIManager.Instance.HideLevelWon();
 
         // Use explicit nextSceneName if set
