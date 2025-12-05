@@ -40,9 +40,13 @@ public class PlayerScript : MonoBehaviour
     private BoxCollider2D MyFeetHitbox;
     private Rigidbody2D MyRigidBody;
 
+    private float jumpTimeout = 0.5f;   //only let them jump once every 0.5s
+    private float jumpTime = 0;
+
     //wire management
     private bool isCarryingWire = false;
-    private Vector3 holdWirePosition = new Vector3(0.2f, 0.3f, 0);
+    private Vector3 holdWirePosition = new Vector3(0.2f, 0.0f, 0);
+    private Vector3 spawnOffset = new Vector3(0.5f, -0.5f, 0.0f);
 
     //things that we get from other objects
     private GameObject CurrentWire;
@@ -117,7 +121,7 @@ public class PlayerScript : MonoBehaviour
     void CheckPlayerInput()
     {
         /*-----MOTION---------*/
-        float xSpeed = Mathf.Abs(MyRigidBody.velocity.x);
+
         float accel = (MyFeetHitbox.IsTouchingLayers(GroundLayers)) ? moveAccel : airLoss * moveAccel;
 
         if (Input.GetKey(KeyCode.LeftArrow))    //move left (no acceleration yet, just barebones for debugging until Hanchi pushes his code)
@@ -129,13 +133,13 @@ public class PlayerScript : MonoBehaviour
             MyRigidBody.AddForce(accel * Vector2.right, ForceMode2D.Force);
         }
 
-        if (xSpeed > moveVelocity)
-        {
-            MyRigidBody.velocity = (MyRigidBody.velocity / xSpeed) * moveVelocity;
-        }
+        RescaleXSpeed();
+          
 
-        if (Input.GetKeyDown(KeyCode.Space))    //jump
+        //Jumping
+        if (Input.GetKeyDown(KeyCode.Space) && (Time.time - jumpTime) > jumpTimeout)    //jump
         {
+
             if (MyFeetHitbox.IsTouchingLayers(GroundLayers) || MyFeetHitbox.IsTouchingLayers(MovingPlatform))
             {
                 MyRigidBody.velocity = MyRigidBody.velocity + new Vector2(0, jumpVelocity);
@@ -168,6 +172,17 @@ public class PlayerScript : MonoBehaviour
 
     }
 
+
+    private void RescaleXSpeed()
+    {
+        float xSpeed = Mathf.Abs(MyRigidBody.velocity.x);
+        float newSpeed = MyRigidBody.velocity.x;
+        if (xSpeed > moveVelocity)
+        {
+            newSpeed = (MyRigidBody.velocity.x / xSpeed) * moveVelocity;
+        } 
+        MyRigidBody.velocity = new Vector2(newSpeed, MyRigidBody.velocity.y);
+    }
 
 
     private void CheckDynamicCollisions()
@@ -231,7 +246,7 @@ public class PlayerScript : MonoBehaviour
         Assert.IsTrue(WireSpawner.GetComponent<PlugScript>().IsColorAvailable());  //dummy check
 
         //this assumes we've already checked a wire is available before calling this, so make sure to do that
-        Vector3 startPos = ActiveWireSpawner.transform.position;
+        Vector3 startPos = ActiveWireSpawner.transform.position + spawnOffset;
         Vector3 spawnPos = transform.position + holdWirePosition;
         Color wireColor = ActiveWireSpawner.GetComponent<PlugScript>().GetCurrentColor();
 
