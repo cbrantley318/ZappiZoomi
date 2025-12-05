@@ -76,6 +76,9 @@ public class PlayerScript : MonoBehaviour
     {
         MyRigidBody = GetComponent<Rigidbody2D>();
         MyFeetHitbox = PlayerFeet.GetComponent<BoxCollider2D>();
+        
+        myAnimator = GetComponent<Animator>();
+
         if (elevatorAudio != null)
         {
             elevatorAudio.loop = true;    // loop while standing on elevator
@@ -98,6 +101,8 @@ public class PlayerScript : MonoBehaviour
         CheckDynamicCollisions();   //for now this is just if we're touching elevators
                                     //TODO: add the 'touching wire terminal' to this bit (lol jk it's implemented elsewhere)
         CheckPlayerInput();         //for moving and jumping and (eventually) grabbing wires and placing them and probably a pause screen as well
+
+        UpdateAnimator();
 
     }
 
@@ -285,6 +290,25 @@ public class PlayerScript : MonoBehaviour
         //TODO: maybe a death animation - I'm thinking have him "pop"/"explode" from spikes, or eyes bug out and yellow electricity if water
         PersistentUIManager.Instance.ShowGameOverPanel();
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    void UpdateAnimator()
+    {
+        if (myAnimator == null) return;
+
+        // Horizontal speed
+        float speed = Mathf.Abs(MyRigidBody.velocity.x);
+
+        // Are we on the ground
+        bool isGrounded = MyFeetHitbox.IsTouchingLayers(GroundLayers)
+                        || MyFeetHitbox.IsTouchingLayers(MovingPlatform);
+
+        // Vertical speed (for jump up vs down)
+        float verticalSpeed = MyRigidBody.velocity.y;
+
+        myAnimator.SetFloat("Speed", speed);
+        myAnimator.SetBool("IsGrounded", isGrounded);
+        myAnimator.SetFloat("VerticalSpeed", verticalSpeed);
     }
 
 
