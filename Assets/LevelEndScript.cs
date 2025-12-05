@@ -36,6 +36,7 @@ public class LevelEndScript : MonoBehaviour
 
             mySpriteRenderer.sprite = onLight;  //turn on the light
             myLight.enabled = true;
+            GetComponent<AudioSource>().Play(); //play a little ding
         }
     }
 
@@ -43,8 +44,8 @@ public class LevelEndScript : MonoBehaviour
     void OnLevelComplete()
     {
         // Optionally disable player movement immediately so nothing else happens
-        // You can disable this GameObject or set a flag — here we disable this script
-        this.enabled = false;
+        // You can disable this GameObject or set a flag — here we disable this script  //what??
+        //this.enabled = false;
 
         // Optionally play a sfx or animation here, then show modal after delay
         if (levelCompleteDelay > 0f)
