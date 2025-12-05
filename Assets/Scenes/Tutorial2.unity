@@ -96,7 +96,7 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 0}
+  m_LightingDataAsset: {fileID: 112000000, guid: a0eecad2e880d0845a996adc62dd3458, type: 2}
   m_LightingSettings: {fileID: 0}
 --- !u!196 &4
 NavMeshSettings:
@@ -129286,38 +129286,6 @@ PrefabInstance:
     - target: {fileID: 263701130901704193, guid: e6c9250690da49b47a8756d8a77a6b1e, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2943991088932693397, guid: e6c9250690da49b47a8756d8a77a6b1e, type: 3}
-      propertyPath: m_IsActive
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 3730777138578999899, guid: e6c9250690da49b47a8756d8a77a6b1e, type: 3}
-      propertyPath: m_Intensity
-      value: 0.01
-      objectReference: {fileID: 0}
-    - target: {fileID: 3730777138578999899, guid: e6c9250690da49b47a8756d8a77a6b1e, type: 3}
-      propertyPath: m_ApplyToSortingLayers.Array.size
-      value: 7
-      objectReference: {fileID: 0}
-    - target: {fileID: 3730777138578999899, guid: e6c9250690da49b47a8756d8a77a6b1e, type: 3}
-      propertyPath: m_ApplyToSortingLayers.Array.data[4]
-      value: 197814893
-      objectReference: {fileID: 0}
-    - target: {fileID: 3730777138578999899, guid: e6c9250690da49b47a8756d8a77a6b1e, type: 3}
-      propertyPath: m_ApplyToSortingLayers.Array.data[5]
-      value: 1585669733
-      objectReference: {fileID: 0}
-    - target: {fileID: 3730777138578999899, guid: e6c9250690da49b47a8756d8a77a6b1e, type: 3}
-      propertyPath: m_ApplyToSortingLayers.Array.data[6]
-      value: 1182983495
-      objectReference: {fileID: 0}
-    - target: {fileID: 7441746138116253407, guid: e6c9250690da49b47a8756d8a77a6b1e, type: 3}
-      propertyPath: m_PointLightInnerRadius
-      value: 500
-      objectReference: {fileID: 0}
-    - target: {fileID: 7441746138116253407, guid: e6c9250690da49b47a8756d8a77a6b1e, type: 3}
-      propertyPath: m_PointLightOuterRadius
-      value: 500
       objectReference: {fileID: 0}
     - target: {fileID: 8160292626796026948, guid: e6c9250690da49b47a8756d8a77a6b1e, type: 3}
       propertyPath: m_Name
