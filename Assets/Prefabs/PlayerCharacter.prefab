@@ -429,15 +429,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_ComponentVersion: 1
-  m_LightType: 3
+  m_LightType: 1
   m_BlendStyleIndex: 0
   m_FalloffIntensity: 0.75
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 0.5
+  m_Intensity: 1.88
   m_LightVolumeIntensity: 1
   m_LightVolumeIntensityEnabled: 0
   m_ApplyToSortingLayers: f7756c9b596922843550e207000000006d6aca0b6566835e47e58246
-  m_LightCookieSprite: {fileID: 0}
+  m_LightCookieSprite: {fileID: -1273746884, guid: 9908973489ddf49ba9f2b5696f2652ef, type: 3}
   m_DeprecatedPointLightCookieSprite: {fileID: 0}
   m_LightOrder: 0
   m_AlphaBlendOnOverlap: 0
@@ -450,8 +450,8 @@ MonoBehaviour:
   m_ShadowVolumeIntensityEnabled: 0
   m_ShadowVolumeIntensity: 0.75
   m_LocalBounds:
-    m_Center: {x: 0, y: -0.00000011920929, z: 0}
-    m_Extent: {x: 0.9985302, y: 0.99853027, z: 0}
+    m_Center: {x: 0.010749996, y: 0.010299981, z: 0}
+    m_Extent: {x: 1.07845, y: 1.1692, z: 0}
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 1
@@ -462,10 +462,17 @@ MonoBehaviour:
   m_ShapeLightFalloffSize: 0.5
   m_ShapeLightFalloffOffset: {x: 0, y: 0}
   m_ShapePath:
-  - {x: -0.5, y: -0.5, z: 0}
-  - {x: 0.5, y: -0.5, z: 0}
-  - {x: 0.5, y: 0.5, z: 0}
-  - {x: -0.5, y: 0.5, z: 0}
+  - {x: -0.5617523, y: -0.01992464, z: 0}
+  - {x: -0.44809198, y: -0.16709971, z: 0}
+  - {x: -0.44211626, y: -0.40614152, z: 0}
+  - {x: -0.36851883, y: -0.6593616, z: 0}
+  - {x: 0.24114513, y: -0.6531513, z: 0}
+  - {x: 0.3825779, y: -0.5256624, z: 0}
+  - {x: 0.4602661, y: -0.40414953, z: 0}
+  - {x: 0.5896411, y: 0.48605585, z: 0}
+  - {x: 0.3546896, y: 0.6795063, z: 0}
+  - {x: -0.37040377, y: 0.67353034, z: 0}
+  - {x: -0.5677285, y: 0.49601603, z: 0}
 --- !u!95 &443594741656545552
 Animator:
   serializedVersion: 5

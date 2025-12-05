@@ -174,7 +174,7 @@ GameObject:
   - component: {fileID: 6835735827767574973}
   - component: {fileID: 5211888802540389874}
   - component: {fileID: 4492136200726811451}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: PowerPlug
   m_TagString: Untagged
   m_Icon: {fileID: 0}
