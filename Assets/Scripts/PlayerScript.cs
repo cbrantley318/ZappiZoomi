@@ -46,7 +46,7 @@ public class PlayerScript : MonoBehaviour
 
     //wire management
     private bool isCarryingWire = false;
-    private Vector3 holdWirePosition = new Vector3(0.2f, 0.0f, 0);
+    private Vector3 holdWirePosition = new Vector3(0.2f, -0.2f, 0);
     private Vector3 spawnOffset = new Vector3(0.5f, -0.5f, 0.0f);
 
     //things that we get from other objects
